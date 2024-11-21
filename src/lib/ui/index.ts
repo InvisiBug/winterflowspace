@@ -1,8 +1,5 @@
 "use client";
 
-export { default as BackArrow } from "./backArrow";
-export { default as Tag } from "./tag";
-
 import { createGlobalStyle } from "styled-components";
 import { background } from "../colours";
 

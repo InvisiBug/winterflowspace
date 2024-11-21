@@ -1,5 +1,5 @@
 import { P5CanvasInstance, ReactP5Wrapper, SketchProps } from "react-p5-wrapper";
-import { Gym, ActivitiesEntity } from "../types";
+import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
 import { parseSchedule } from "../utils";
 import { text } from "stream/consumers";
 
@@ -43,11 +43,11 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
     p5.textSize(50);
     p5.textStyle(p5.BOLD);
     p5.textAlign(p5.CENTER);
-    p5.text("Studio Free", p5.width / 2, p5.height / 5 - 10);
+    p5.text("Winter Flow Space", p5.width / 2, p5.height / 5 - 10);
 
     p5.textSize(25);
     p5.textStyle(p5.NORMAL);
-    p5.text("Studio availability at my local gym (in 15min intervals)", p5.width / 2, p5.height / 5 + 25);
+    p5.text("Studio availability at my local gym (in 15min intervals) \nSoon to be everyoens gym", p5.width / 2, p5.height / 5 + 25);
 
     for (let x = 0; x < dimensions[TIME_SLOT]; x++) {
       for (let y = 0; y < dimensions[DAYS]; y++) {
