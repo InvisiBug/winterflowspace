@@ -1,5 +1,5 @@
-// export const background = "#2A2C31";
-export const background = "#000000";
+export const background = "#2A2C31";
+// export const background = "#000000";
 // export const background = "#222222";
 // export const background = "#2F3437";
 

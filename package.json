@@ -9,7 +9,7 @@
     "lint": "next lint",
     "up": "docker compose up -d --build",
     "down": "docker compose down",
-    "deploy": "git checkout live-release && git merge dev && git push && git checkout dev"
+    "fullsend": "git checkout live-release && git merge dev && git push && git checkout dev"
   },
   "dependencies": {
     "axios": "^1.7.7",

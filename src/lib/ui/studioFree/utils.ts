@@ -1,4 +1,4 @@
-import { Gym, ActivitiesEntity } from "./types";
+import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
 
 /*
   Returns a 2D array of the schedule for the next x days (set to 5)

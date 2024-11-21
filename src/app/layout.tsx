@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Flowception",
-  description: "Coming soon",
+  title: "Winter Flow Space",
+  description: "A little timtable app that shows the times the studio is free in Pure gyms",
 };
 
 export default function RootLayout({
