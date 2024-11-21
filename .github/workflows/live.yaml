@@ -44,7 +44,7 @@ jobs:
 
       - name: Update values.yaml
         run: |
-          cd helm
+          cd kube
           sed -i 's|APP_VERSION:.*|APP_VERSION: '${{ github.sha }}'|' ./values/live.yaml
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
@@ -58,13 +58,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge live-release -> master
+      - name: Merge live-release -> main
         uses: devmasx/merge-branch@master
         with:
           type: now
           message: New app version created '${{ github.sha }}'
           from_branch: live-release
-          target_branch: master
+          target_branch: main
           github_token: ${{ secrets.ACCESS_TOKEN }}
 
   sync-dev:
@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge test-release -> test
+      - name: Merge live-release -> main
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: master
+          from_branch: main
           message: fast-forward dev
           target_branch: dev
           github_token: ${{ secrets.ACCESS_TOKEN }}
