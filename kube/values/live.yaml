@@ -1,0 +1,23 @@
+name: winterflowspace
+
+namespace: flowception
+env:
+  APP_VERSION: 42062550536ed3b3ae6a45f5a7f2708954c69ef6
+
+deployment:
+  - name: winterflowspace
+    image: invisibug/winterflowspace
+
+service:
+  loadBalancer:
+    - name: winterflowspace
+      selector: winterflowspace
+      port: 80
+      containerPort: 3000
+
+ingress:
+  - name: winterflowspace.co.uk
+    selector: winterflowspace
+    path: /
+    port: 3000
+    host: flowception.co.uk
