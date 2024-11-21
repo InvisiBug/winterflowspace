@@ -1,5 +1,6 @@
 // "use client";
 import React, { FC } from "react";
+import { GymData } from "@/lib/types";
 
 // import styled from "styled-components";
 // import dynamic from "next/dynamic";
@@ -12,7 +13,6 @@ const StudioFree: FC = async () => {
 
   const response: any = await fetch("https://businessgateway.puregym.com/api/bookings/v1/timetable/75/scheduled-class", { cache: "no-store" });
   const data = await response.json();
-  // boop
 
   return (
     <>
