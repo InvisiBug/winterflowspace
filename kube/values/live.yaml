@@ -16,8 +16,8 @@ service:
       containerPort: 3000
 
 ingress:
-  - name: winterflowspace.co.uk
+  - name: winterflowspace.com
     selector: winterflowspace
     path: /
     port: 3000
-    host: winterflowspace.co.uk
+    host: winterflowspace.com
