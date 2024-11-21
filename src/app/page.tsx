@@ -1,6 +1,5 @@
 // "use client";
 import React, { FC } from "react";
-import { Header } from "@/lib/ui";
 
 // import styled from "styled-components";
 // import dynamic from "next/dynamic";
