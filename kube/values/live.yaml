@@ -20,4 +20,4 @@ ingress:
     selector: winterflowspace
     path: /
     port: 3000
-    host: flowception.co.uk
+    host: winterflowspace.co.uk
