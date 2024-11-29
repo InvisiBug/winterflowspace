@@ -16,7 +16,6 @@ export const parseSchedule = (data: ActivitiesEntity[]) => {
   if (debug) console.log(data);
   const numDays = 5;
   const busySchedule: Schedule[][] = [];
-  const freeSchedule: Schedule[][] = [];
 
   //* Create an array of times the studio is in use over the next 3 days
   Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
@@ -55,6 +54,8 @@ export const parseSchedule = (data: ActivitiesEntity[]) => {
 
   const finalSchedule = new Array<number[]>();
 
+  if (debug) console.log("busy schedule", busySchedule);
+
   Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
     finalSchedule.push(markTimeline(busySchedule[dayIndex]));
   });
@@ -62,14 +63,21 @@ export const parseSchedule = (data: ActivitiesEntity[]) => {
   return finalSchedule;
 };
 
+/**
+ *
+ * @param studioInUseToday
+ * @returns an array of 24 * 15 elements, each element represents a 15 minute time slot, 0 for free, 1 for busy
+ * * note: There's a really annoying point where classes don't start or finish on the hour or on the half hour example, 7:35
+ * * This cause problems with the mark timeline function, which is why the Math.floor is in place
+ */
 export function markTimeline(studioInUseToday: Schedule[]): number[] {
   // Initialize the timeline
   const timeline = new Array<number>((24 * 60) / 15).fill(0);
 
   // Mark the times in the timeline
   for (const timeSlot of studioInUseToday) {
-    const start = (parseInt(timeSlot.start.split(":")[0]) * 60 + parseInt(timeSlot.start.split(":")[1])) / 15;
-    const end = (parseInt(timeSlot.end.split(":")[0]) * 60 + parseInt(timeSlot.end.split(":")[1])) / 15;
+    const start = Math.floor((parseInt(timeSlot.start.split(":")[0]) * 60 + parseInt(timeSlot.start.split(":")[1])) / 15);
+    const end = Math.floor((parseInt(timeSlot.end.split(":")[0]) * 60 + parseInt(timeSlot.end.split(":")[1])) / 15);
 
     for (let i = start; i < end; i++) {
       timeline[i] = 1;
