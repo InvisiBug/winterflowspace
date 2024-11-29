@@ -7,6 +7,14 @@ type MySketchProps = SketchProps & {
   sketchProps: Gym;
 };
 
+const breakpoints: Record<string, number> = {
+  small: 500,
+  medium: 768,
+  xmedium: 950,
+  large: 1500,
+  xlarge: 1750,
+};
+
 /*
  * schedule passed in as a prop from getServerSideProps ./pages/studioFree.tsx
  * and parsed at the bottom of this file
@@ -27,27 +35,46 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
     const dimensions = [schedule.length /* Days */, schedule[0].length /* Time slot (15 min) */];
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    const size = 10;
+    const dotSize = 10;
 
-    const xmargin = p5.windowWidth / 10;
-    const ymargin = p5.windowHeight / 3;
+    let xmargin = 0;
+    if (p5.windowHeight > 400) {
+      xmargin = p5.windowWidth / 10;
+    } else {
+      xmargin = p5.windowWidth / 9;
+    }
+
+    let ymargin = 0;
+    if (p5.windowHeight > 400) {
+      ymargin = p5.windowHeight / 2.5;
+    } else {
+      ymargin = p5.windowHeight / 4;
+    }
+
+    console.log(p5.windowHeight);
 
     const textColour = p5.color("#E6E6E6");
     const freeColour = p5.color("#86A95B");
     const inUseColour = p5.color("#710000");
 
+    console.log("This", schedule[0].length);
     /*
       Create header and sub title
     */
-    p5.fill(textColour);
-    p5.textSize(50);
-    p5.textStyle(p5.BOLD);
-    p5.textAlign(p5.CENTER);
-    p5.text("Winter Flow Space", p5.width / 2, p5.height / 5 - 10);
+    if (p5.windowHeight > 300) {
+      p5.fill(textColour);
+      p5.textSize(50);
+      p5.textStyle(p5.BOLD);
+      p5.textAlign(p5.CENTER);
+      p5.text("Winter Flow Space", p5.width / 2, p5.height / 5 - 10);
 
-    p5.textSize(25);
-    p5.textStyle(p5.NORMAL);
-    p5.text("Studio availability at my local gym (in 15min intervals) \nSoon to be everyoens gym", p5.width / 2, p5.height / 5 + 25);
+      p5.textSize(25);
+      p5.textStyle(p5.NORMAL);
+      p5.text("Studio availability at my local gym (in 15min intervals) \nSoon to be all gyms", p5.width / 2, p5.height / 5 + 25);
+    }
+
+    let startingY = 0;
+    let flag = false;
 
     for (let x = 0; x < dimensions[TIME_SLOT]; x++) {
       for (let y = 0; y < dimensions[DAYS]; y++) {
@@ -57,35 +84,37 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
         const xpos = p5.lerp(xmargin, p5.windowWidth - xmargin, u);
         const ypos = p5.lerp(ymargin, p5.height - ymargin, v);
 
+        // Nasty hack to get the lines to draw between the first and last row
+        if (y === 0 && !flag) {
+          startingY = ypos;
+          flag = true;
+          console.log("here");
+        }
+        console.log("Starting y", startingY);
+
         p5.fill(textColour);
         p5.textSize(16);
 
         /*
           Row titles (Which day is it)
         */
-        p5.textAlign(p5.LEFT);
+        const oldPos = false;
+        if (oldPos) p5.textAlign(p5.LEFT);
+        if (!oldPos) p5.textAlign(p5.RIGHT);
+
         if (x === 0) {
           if (y === 0) {
-            p5.text(`Today`, xpos - 10, ypos - 15);
+            if (oldPos) p5.text(`Today`, xpos - 10, ypos - 15);
+            if (!oldPos) p5.text(`Today`, xpos - 15, ypos + 4);
           } else if (y === 1) {
-            p5.text(`Tomorrow`, xpos - 10, ypos - 15);
+            if (oldPos) p5.text(`Tomorrow`, xpos - 10, ypos - 15);
+            if (!oldPos) p5.text(`Tomorrow`, xpos - 15, ypos + 4);
           } else {
             const day = new Date();
             day.setDate(day.getDate() + y);
-            p5.text(`${weekday[day.getDay()]}`, xpos - 10, ypos - 15);
+            if (oldPos) p5.text(`${weekday[day.getDay()]}`, xpos - 10, ypos - 15);
+            if (!oldPos) p5.text(`${weekday[day.getDay()]}`, xpos - 15, ypos + 4);
           }
-        }
-
-        /*
-          Only show times on the hour
-        */
-        if (x % 4 === 0) {
-          p5.stroke(0, 0, 0);
-          p5.fill(textColour);
-          p5.line(xpos, ypos, xpos, ypos + 20);
-
-          p5.textAlign(p5.CENTER);
-          p5.text(`${x / 4}:00`, xpos, ypos + 40);
         }
 
         /*
@@ -96,7 +125,22 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
         } else {
           p5.fill(inUseColour);
         }
-        p5.ellipse(xpos, ypos, size);
+        p5.ellipse(xpos, ypos, dotSize);
+
+        /*
+          Only show times on the hour
+        */
+        if (x % 4 === 0 && y === 4) {
+          p5.stroke(0, 0, 0);
+          p5.fill(textColour);
+          p5.stroke(p5.color("#696866"));
+          p5.line(xpos, startingY, xpos, ypos + 20);
+          p5.stroke(0, 0, 0);
+
+          p5.textAlign(p5.CENTER);
+          // p5.text(`${x / 4}:00`, xpos, ypos + 40);
+          p5.text(`${x / 4}`, xpos, ypos + 40);
+        }
       }
     }
   };
@@ -109,6 +153,7 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
     const { activities } = sketchProps;
 
     schedule = parseSchedule(activities);
+    console.log(schedule);
   };
 
   p5.mouseClicked = () => {};
