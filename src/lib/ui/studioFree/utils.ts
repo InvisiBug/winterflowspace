@@ -12,57 +12,6 @@ interface Schedule {
   duration?: number;
 }
 
-export const parseSchedule = (data: ActivitiesEntity[]) => {
-  if (debug) console.log(data);
-  const numDays = 5;
-  const busySchedule: Schedule[][] = [];
-
-  //* Create an array of times the studio is in use over the next 3 days
-  Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
-    const todaysSchedule = new Array<Schedule>();
-
-    data.forEach((element: ActivitiesEntity) => {
-      if (element.studio === "Studio" || element.studio === "Functional Area") {
-        const rawStartTime = element.startDateTime.dateTime.replace("T", " "); // They keep changing the date format so pulled it out here
-        const d = new Date();
-
-        const now = new Date(d.setDate(d.getDate() + dayIndex));
-        const date = new Date(Date.parse(rawStartTime));
-
-        if (debug) console.log(rawStartTime);
-        if (debug) console.log(now.setHours(0, 0, 0, 0), date.setHours(0, 0, 0, 0));
-
-        // Get only the events for the day
-        if (now.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)) {
-          if (debug) console.log("Here");
-          const startHours = String(new Date(rawStartTime).getHours()).padStart(2, "0");
-          const startMinutes = String(new Date(rawStartTime).getMinutes()).padStart(2, "0");
-
-          const endHours = String(new Date(Date.parse(rawStartTime) + element.duration * 60000).getHours()).padStart(2, "0");
-          const endMinutes = String(new Date(Date.parse(rawStartTime) + element.duration * 60000).getMinutes()).padStart(2, "0");
-
-          todaysSchedule.push({
-            start: `${startHours}:${startMinutes}`,
-            end: `${endHours}:${endMinutes}`,
-            duration: element.duration,
-          });
-        }
-      }
-    });
-    busySchedule.push(todaysSchedule);
-  });
-
-  const finalSchedule = new Array<number[]>();
-
-  if (debug) console.log("busy schedule", busySchedule);
-
-  Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
-    finalSchedule.push(markTimeline(busySchedule[dayIndex]));
-  });
-
-  return finalSchedule;
-};
-
 /**
  *
  * @param studioInUseToday
