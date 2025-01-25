@@ -1,36 +1,39 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import Hour from "./components/hour";
+import { Gym } from "@/lib/types/schedule";
+import { parseSchedule } from "@/lib/utils";
+import { parse } from "path";
 
-const MobileView: FC = () => {
-  const hours = Array.from({ length: 24 }, (_, i) => i);
+const MobileView: FC<Props> = ({ data }) => {
+  const hours = Array.from({ length: 24 });
 
-  console.log(hours[5]);
+  const tempData = parseSchedule(data.activities);
+  const schedule = tempData[0];
+
   return (
     <Container>
-      {hours.map((hour) => (
-        <Hour key={hour}>
-          <Title>{hour}:00</Title>
-          <Status>Partially In Use</Status>
-        </Hour>
-      ))}
+      {hours.map((_, index) => {
+        const intervals = [schedule[index * 4], schedule[index * 4 + 1], schedule[index * 4 + 2], schedule[index * 4 + 3]];
+        console.log(intervals, index);
+
+        return <Hour key={index} hour={index} intervals={intervals} />;
+      })}
     </Container>
   );
 };
 
+type Props = {
+  data: Gym;
+};
+
 export default MobileView;
 
-const borders = true;
-
-const Title = styled.p`
-  border: ${borders ? "1px solid blue" : "none"};
-`;
-
-const Status = styled.p`
-  border: ${borders ? "1px solid yellow" : "none"};
-`;
+const borders = false;
 
 const Container = styled.div`
-  border: ${borders ? "1px solid red" : "none"};
+  /* border: ${borders ? "1px solid red" : "none"}; */
+  color: #fbfffe;
 
   width: 100svw;
   min-height: 100svh;
@@ -41,11 +44,4 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
-
-const Hour = styled.div`
-  border: ${borders ? "1px solid green" : "none"};
-  display: flex;
-
-  padding: 1rem;
 `;

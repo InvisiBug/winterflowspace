@@ -26,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <GlobalSytles />
       <html lang="en" className={inter.className}>
+        <GlobalSytles />
         <body>
           {/* <StyledComponentsRegistry>{children}</StyledComponentsRegistry> */}
           {children}

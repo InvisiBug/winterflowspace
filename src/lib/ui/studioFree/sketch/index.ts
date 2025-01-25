@@ -1,6 +1,6 @@
 import { P5CanvasInstance, ReactP5Wrapper, SketchProps } from "react-p5-wrapper";
 import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
-import { parseSchedule } from "../utils";
+import { parseSchedule } from "@/lib/utils";
 import { text } from "stream/consumers";
 
 type MySketchProps = SketchProps & {
