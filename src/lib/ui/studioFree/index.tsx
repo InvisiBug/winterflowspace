@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { sketch } from "./sketch";
 import { Gym } from "@/lib/types/schedule";
 
+//! Window issue https://github.com/P5-wrapper/react/issues/47
+
 const Experiment: FC<Props> = ({ data }) => {
   return (
     <Container>

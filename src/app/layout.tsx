@@ -2,21 +2,21 @@ import StyledComponentsRegistry from "../lib/registry";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { GlobalSytles } from "@/lib/ui";
+import { Inter, Roboto } from "next/font/google";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+// TODO (Fix): Fix fonts [🌀-1]
+const inter = Inter({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+
+const robotoMono = Roboto({ subsets: ["latin"], weight: "400", variable: "--font-roboto-mono" });
 
 export const metadata: Metadata = {
   title: "Winter Flow Space",
-  description: "A little timtable app that shows the times the studio is free in Pure gyms",
+  description: "A little timtable app that shows the times the studio is free in a Pure gym",
 };
 
 export default function RootLayout({
@@ -25,10 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </body>
-    </html>
+    <>
+      <GlobalSytles />
+      <html lang="en" className={inter.className}>
+        <body>
+          {/* <StyledComponentsRegistry>{children}</StyledComponentsRegistry> */}
+          {children}
+        </body>
+      </html>
+    </>
   );
 }
