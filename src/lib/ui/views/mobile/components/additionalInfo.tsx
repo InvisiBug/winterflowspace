@@ -1,16 +1,14 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import { freeColour, partiallyFreeColour, busyColour } from "@/lib/colours";
 
 const AdditionalInfo: FC<Props> = ({ isOpen, intervals }) => {
-  console.log(isOpen);
   return (
-    <>
-      <Container $open={isOpen}>
-        {intervals.map((val, index) => {
-          return <Indicator key={index} $val={val}></Indicator>;
-        })}
-      </Container>
-    </>
+    <Container $open={isOpen}>
+      {intervals.map((val, index) => {
+        return <Indicator key={index} $val={val}></Indicator>;
+      })}
+    </Container>
   );
 };
 
@@ -24,15 +22,21 @@ type Props = {
 const Container = styled.div<{ $open?: boolean }>`
   display: ${(props) => (props.$open ? "flex" : "none")};
 
+  /* display: flex; */
   margin: 0.5rem 1rem;
 
-  /* border: 1px solid red; */
-
   justify-content: space-around;
+
+  /* transition: all 0.3s linear;
+  height: ${({ $open }) => (!$open ? "100%" : "0")};
+
+  transform: ${({ $open }) => ($open ? "translateY(0)" : "translateY(-50px)")};
+  opacity: ${({ $open }) => ($open ? "0" : "1")}; */
 `;
 
 const Indicator = styled.div<{ $val?: number }>`
-  background-color: ${(props) => (props.$val === 0 ? "green" : "red")};
+  background-color: ${(props) => (props.$val === 0 ? freeColour : busyColour)};
+  border: 1px solid black;
 
   width: 2rem;
   height: 2rem;

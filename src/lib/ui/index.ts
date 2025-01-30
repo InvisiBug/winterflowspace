@@ -1,14 +1,13 @@
 "use client";
 
 import { createGlobalStyle } from "styled-components";
-import { background } from "../colours";
 
 import { Roboto } from "next/font/google"; // Example using Roboto font
 
-// TODO (Fix): Figure out why fonts arent working [🌀-1]
-// TODO (Investigation): Why doesnt border box work here? [🌀-2]
+// TODO (Fix): Figure out why fonts aren't working [🌀-1]
+// TODO (Investigation): Why doesn't border box work here? [🌀-2]
 
-export const GlobalSytles = createGlobalStyle`
+export const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
     /* font-family: Arial, Helvetica, sans-serif; */
@@ -22,19 +21,29 @@ export const GlobalSytles = createGlobalStyle`
     ::-webkit-scrollbar {
       display: none;
     }
-    /* background-color: ${background}; */
-    /* background-color: #243E36 */
 
+    /* https://www.joshwcomeau.com/gradient-generator/ */
     background-image: linear-gradient(
-    45deg,
-    hsl(162deg 27% 19%) 0%,
-    hsl(140deg 21% 20%) 14%,
-    hsl(103deg 19% 21%) 29%,
-    hsl(73deg 24% 19%) 43%,
-    hsl(50deg 31% 20%) 57%,
-    hsl(36deg 38% 21%) 71%,
-    hsl(25deg 39% 23%) 86%,
-    hsl(14deg 36% 26%) 100%
-  );
+      319deg,
+      hsl(0deg 100% 49%) 0%,
+      hsl(22deg 99% 49%) 6%,
+      hsl(28deg 93% 55%) 11%,
+      hsl(33deg 90% 62%) 17%,
+      hsl(39deg 87% 70%) 22%,
+      hsl(45deg 87% 79%) 28%,
+      hsl(53deg 100% 90%) 33%,
+      hsl(47deg 90% 82%) 39%,
+      hsl(43deg 89% 75%) 44%,
+      hsl(39deg 92% 69%) 50%,
+      hsl(35deg 94% 63%) 56%,
+      hsl(32deg 97% 57%) 61%,
+      hsl(30deg 100% 50%) 67%,
+      hsl(18deg 85% 54%) 72%,
+      hsl(6deg 66% 53%) 78%,
+      hsl(354deg 57% 46%) 83%,
+      hsl(344deg 62% 37%) 89%,
+      hsl(336deg 63% 28%) 94%,
+      hsl(327deg 61% 20%) 100%
+    );
   }
 `;

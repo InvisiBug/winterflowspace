@@ -5,6 +5,11 @@ import { Gym } from "@/lib/types/schedule";
 import { parseSchedule } from "@/lib/utils";
 import { parse } from "path";
 
+/**
+ *
+ * @param data => schedule data
+ * @returns all the indicators for the schedule
+ */
 const MobileView: FC<Props> = ({ data }) => {
   const hours = Array.from({ length: 24 });
 
@@ -15,7 +20,6 @@ const MobileView: FC<Props> = ({ data }) => {
     <Container>
       {hours.map((_, index) => {
         const intervals = [schedule[index * 4], schedule[index * 4 + 1], schedule[index * 4 + 2], schedule[index * 4 + 3]];
-        console.log(intervals, index);
 
         return <Hour key={index} hour={index} intervals={intervals} />;
       })}
@@ -38,8 +42,6 @@ const Container = styled.div`
   width: 100svw;
   min-height: 100svh;
   padding: 2rem;
-
-  /* font-family: "Trebuchet MS, sans-serif"; */
 
   display: flex;
   flex-direction: column;
