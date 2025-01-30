@@ -2,7 +2,7 @@ import StyledComponentsRegistry from "../lib/registry";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { GlobalSytles } from "@/lib/ui";
+import { GlobalStyles } from "@/lib/ui";
 import { Inter, Roboto } from "next/font/google";
 
 // TODO (Fix): Fix fonts [🌀-1]
@@ -16,7 +16,7 @@ const robotoMono = Roboto({ subsets: ["latin"], weight: "400", variable: "--font
 
 export const metadata: Metadata = {
   title: "Winter Flow Space",
-  description: "A little timtable app that shows the times the studio is free in a Pure gym",
+  description: "A little timetable app that shows the times the studio is free in a Pure gym",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className={inter.className}>
-        <GlobalSytles />
+        <GlobalStyles />
         <body>
           {/* <StyledComponentsRegistry>{children}</StyledComponentsRegistry> */}
           {children}

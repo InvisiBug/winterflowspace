@@ -4,6 +4,7 @@ import { Gym } from "@/lib/types/schedule";
 import { GymData } from "@/lib/types/gyms";
 import Experiment from "@/lib/ui/studioFree";
 import Switcher from "@/lib/ui/switcher";
+import HamburgerMenu from "@/lib/ui/hamburgerMenu";
 
 const StudioFree: FC = async () => {
   const gymId = 75;
@@ -32,9 +33,8 @@ const StudioFree: FC = async () => {
 
   return (
     <>
+      {/* <HamburgerMenu /> */}
       <Switcher data={data} />
-
-      {/* <Experiment data={data} /> */}
     </>
   );
 };

@@ -3,7 +3,7 @@ import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
 export const getCurrentHour = () => {
   const date = new Date();
   const hours = date.getHours();
-  return hours % 14;
+  return hours;
 };
 
 // TODO (Fix): Move to types file
