@@ -6,7 +6,11 @@ const AdditionalInfo: FC<Props> = ({ isOpen, intervals }) => {
   return (
     <Container $open={isOpen}>
       {intervals.map((val, index) => {
-        return <Indicator key={index} $val={val}></Indicator>;
+        return (
+          <Indicator key={index} $val={val}>
+            {val === 1 ? "X" : null}
+          </Indicator>
+        );
       })}
     </Container>
   );
@@ -34,7 +38,9 @@ const Container = styled.div<{ $open?: boolean }>`
   opacity: ${({ $open }) => ($open ? "0" : "1")}; */
 `;
 
-const Indicator = styled.div<{ $val?: number }>`
+const Indicator = styled.h1<{
+  $val?: number;
+}>`
   background-color: ${(props) => (props.$val === 0 ? freeColour : busyColour)};
   border: 1px solid black;
 
@@ -43,4 +49,7 @@ const Indicator = styled.div<{ $val?: number }>`
   border-radius: 1rem;
 
   justify-content: center;
+
+  display: flex;
+  align-items: center;
 `;
