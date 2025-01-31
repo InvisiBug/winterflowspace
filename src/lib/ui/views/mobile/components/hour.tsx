@@ -25,7 +25,7 @@ const Hour: FC<Props> = ({ hour, intervals }) => {
       setState("Free");
     } else if (sum < 4) {
       setState("Partially Free");
-    } else if (sum > 4) {
+    } else if (sum >= 4) {
       setState("Busy");
     }
 
