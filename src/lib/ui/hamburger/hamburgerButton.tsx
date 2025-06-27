@@ -36,8 +36,8 @@ const Container = styled.div`
   width: 4rem;
   height: 4rem;
 
-  padding-top: 2rem;
-  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
 
   display: flex;
   justify-content: space-around;

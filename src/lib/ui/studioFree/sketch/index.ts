@@ -75,7 +75,7 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
 
       p5.textSize(25);
       p5.textStyle(p5.NORMAL);
-      p5.text(`Studio availability in ${name} (in 15min intervals) `, p5.width / 2, p5.height / 5 + 25);
+      p5.text(`Studio availability in ${name || "Sheffield Millhouses"} (in 15min intervals) `, p5.width / 2, p5.height / 5 + 25);
     }
 
     let startingY = 0;

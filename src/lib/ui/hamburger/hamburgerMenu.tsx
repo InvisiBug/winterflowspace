@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { AvailableGyms } from "@/lib/types/gyms";
 
+// TODO (Feature): Add search to list of gyms
 const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
   console.log("🚀 ~ isHamburgerMenuOpen:", isHamburgerMenuOpen);
 
@@ -17,13 +18,15 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
     window.location.reload();
   };
 
+  console.log(parsed?.name);
+
   return (
     <>
       {isHamburgerMenuOpen ? (
         <Container>
           <p>Please select your gym</p>
           <br />
-          <p>{`Currently selected: \n ${parsed.name}`}</p>
+          <p>{`Currently selected: \n ${parsed?.name || "Sheffield Millhouses"}`}</p>
           <br />
           <Links>
             {gymIds.map((gym) => (
