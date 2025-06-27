@@ -1,46 +1,43 @@
 // "use client";
 import React, { FC } from "react";
+import { cookies } from "next/headers";
 import { Gym } from "@/lib/types/schedule";
-import { GymData } from "@/lib/types/gyms";
-import Experiment from "@/lib/ui/studioFree";
 import Switcher from "@/lib/ui/switcher";
-import HamburgerMenu from "@/lib/ui/hamburgerMenu";
+import { AvailableGyms, GymData } from "@/lib/types/gyms";
 
 const StudioFree: FC = async () => {
-  const gymId = 75;
+  //* Get and format the list of available gyms
+  const rawAvailableGymsResponse = await fetch("https://www.puregym.com/gymsandcities/page-data/sq/d/273207268.json", { cache: "no-store" });
+  const formattedAvailableGymResponse: GymData = await rawAvailableGymsResponse.json();
 
-  const response = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${gymId}/scheduled-class`, { cache: "no-store" });
-  const data: Gym = await response.json();
+  const availableGyms: AvailableGyms = [];
 
-  // * An Api call for a list of available locations => https://www.puregym.com/gymsandcities/page-data/sq/d/273207268.json
+  // Format the available gyms data
+  formattedAvailableGymResponse.data.allGym.nodes?.forEach((gym) => {
+    availableGyms.push({ name: gym.name, id: gym.gymId });
+    availableGyms.sort((a, b) => a.name.localeCompare(b.name));
+  });
 
-  // const gymsResponse = await fetch("https://www.puregym.com/gymsandcities/page-data/sq/d/273207268.json", { cache: "no-store" });
-  // const gymData: GymData = await gymsResponse.json();
+  //* Get the user's gym from cookies or default to a specific gym
+  const cookieStore = await cookies();
+  const usersGym = cookieStore.get("userGym");
+  let rawGymSchedule;
 
-  // const gyms: Data[] = [];
+  if (!usersGym) {
+    console.log("No userGym cookie found, setting default gym.");
+    rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${75}/scheduled-class`, { cache: "no-store" });
+  } else {
+    const parsed = JSON.parse(decodeURIComponent(usersGym.value));
+    rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${parsed.id}/scheduled-class`, { cache: "no-store" });
+  }
 
-  type Data = {
-    name: string;
-    id: string;
-  };
-
-  // if (!gymData.data.allGym.nodes) return;
-
-  // gymData.data.allGym.nodes.forEach((gym) => {
-  //   gyms.push({ name: gym.name, id: gym.gymId });
-  // });
-  // console.log("🚀 ~ gymData.data.allGym.nodes.forEach ~ gyms:", gyms);
+  const parsedGymSchedule: Gym = await rawGymSchedule.json();
 
   return (
     <>
-      {/* <HamburgerMenu /> */}
-      <Switcher data={data} />
+      <Switcher data={parsedGymSchedule} availableGyms={availableGyms} />
     </>
   );
-};
-
-type Props = {
-  data: Gym;
 };
 
 export default StudioFree;

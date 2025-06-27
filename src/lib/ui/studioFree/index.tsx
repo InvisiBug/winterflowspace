@@ -1,6 +1,6 @@
-"use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
+import Cookies from "js-cookie";
 import styled from "styled-components";
 import { sketch } from "./sketch";
 import { Gym } from "@/lib/types/schedule";
@@ -8,9 +8,20 @@ import { Gym } from "@/lib/types/schedule";
 //! Window issue https://github.com/P5-wrapper/react/issues/47
 
 const Experiment: FC<Props> = ({ data }) => {
+  const val = Cookies.get("userGym");
+
+  const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
+
+  const enrichedData = {
+    ...data,
+    ...parsed,
+  };
+
+  console.log(enrichedData);
+
   return (
     <Container>
-      <ReactP5Wrapper sketch={sketch} sketchProps={data} />
+      <ReactP5Wrapper sketch={sketch} sketchProps={enrichedData} />
     </Container>
   );
 };

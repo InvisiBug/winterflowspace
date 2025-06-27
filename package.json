@@ -12,7 +12,11 @@
     "fullsend": "git checkout live-release && git merge dev && git push && git checkout dev"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.7",
+    "js-cookie": "^3.0.5",
     "next": "15.0.2",
     "prettier": "^3.3.3",
     "react": "19.0.0-rc-02c0e824-20241028",
