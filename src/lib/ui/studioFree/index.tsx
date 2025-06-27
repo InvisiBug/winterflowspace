@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import styled from "styled-components";
 import { sketch } from "./sketch";
 import { Gym } from "@/lib/types/schedule";
-import { UserSelection } from "@/lib/types/gyms";
 
 //! Window issue https://github.com/P5-wrapper/react/issues/47
 
@@ -28,7 +27,7 @@ const Experiment: FC<Props> = ({ data }) => {
 };
 
 type Props = {
-  data: Gym & UserSelection;
+  data: Gym;
 };
 
 export default Experiment;
