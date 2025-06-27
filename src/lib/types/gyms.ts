@@ -48,3 +48,10 @@ export interface Urls {
   authLogout: string;
   joinJoin: string;
 }
+
+export type AvailableGyms = UserSelection[];
+
+export type UserSelection = {
+  name: string;
+  id: string;
+};

@@ -68,6 +68,8 @@ const Container = styled.div<{
   color: ${textColour};
 
   border-radius: 0.5rem;
+  /* align-self: center; */
+
   display: flex;
 
   flex-direction: column;

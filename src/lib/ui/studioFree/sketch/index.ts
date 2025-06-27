@@ -1,10 +1,12 @@
 import { P5CanvasInstance, ReactP5Wrapper, SketchProps } from "react-p5-wrapper";
 import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
+import { UserSelection } from "@/lib/types/gyms";
 import { parseSchedule } from "@/lib/utils";
 import { text } from "stream/consumers";
 
+const log = false;
 type MySketchProps = SketchProps & {
-  sketchProps: Gym;
+  sketchProps: Gym & UserSelection;
 };
 
 const breakpoints: Record<string, number> = {
@@ -21,9 +23,12 @@ const breakpoints: Record<string, number> = {
  */
 export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
   let schedule: number[][] = [];
+  let name = "";
+  let id = "";
 
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    console.log();
   };
 
   p5.draw = () => {
@@ -51,13 +56,13 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
       ymargin = p5.windowHeight / 4;
     }
 
-    console.log(p5.windowHeight);
+    if (log) console.log(p5.windowHeight);
 
     const textColour = p5.color("#E6E6E6");
     const freeColour = p5.color("#86A95B");
     const inUseColour = p5.color("#710000");
 
-    console.log("This", schedule[0].length);
+    if (log) console.log("This", schedule[0].length);
     /*
       Create header and sub title
     */
@@ -66,11 +71,11 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
       p5.textSize(50);
       p5.textStyle(p5.BOLD);
       p5.textAlign(p5.CENTER);
-      p5.text("Winter Flow Space", p5.width / 2, p5.height / 5 - 10);
+      p5.text("Winter Flow Space @ PureGym", p5.width / 2, p5.height / 5 - 10);
 
       p5.textSize(25);
       p5.textStyle(p5.NORMAL);
-      p5.text("Studio availability at my local gym (in 15min intervals) \nSoon to be all gyms", p5.width / 2, p5.height / 5 + 25);
+      p5.text(`Studio availability in ${name || "Sheffield Millhouses"} (in 15min intervals) `, p5.width / 2, p5.height / 5 + 25);
     }
 
     let startingY = 0;
@@ -88,9 +93,9 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
         if (y === 0 && !flag) {
           startingY = ypos;
           flag = true;
-          console.log("here");
+          if (log) console.log("here");
         }
-        console.log("Starting y", startingY);
+        if (log) console.log("Starting y", startingY);
 
         p5.fill(textColour);
         p5.textSize(16);
@@ -149,11 +154,13 @@ export const sketch = (p5: P5CanvasInstance<MySketchProps>) => {
     Raw schedule data is passed in
     Parse the data and save the parsed schedule
   */
-  p5.updateWithProps = ({ sketchProps }: { sketchProps: Gym }) => {
-    const { activities } = sketchProps;
+  p5.updateWithProps = ({ sketchProps }: { sketchProps: Gym & UserSelection }) => {
+    const props = sketchProps;
 
-    schedule = parseSchedule(activities);
-    console.log(schedule);
+    schedule = parseSchedule(props.activities);
+    name = props.name;
+    id = props.id;
+    if (log) console.log(schedule);
   };
 
   p5.mouseClicked = () => {};
