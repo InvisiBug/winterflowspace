@@ -69,13 +69,12 @@ const Container = styled.div`
   top: 0;
   left: 0;
   left: -50vw;
-  /* width: 25vw; */
+
   height: 100vh;
   z-index: 10;
   background: rgba(50, 50, 50);
   padding-top: 5rem;
-  /* padding-left: 1rem; */
-  /* margin-left: 1rem; */
+  padding-left: 1rem;
 
   animation: ${slide} 0.5s forwards;
 
