@@ -23,7 +23,7 @@ const MobileView: FC<Props> = ({ data }) => {
 
   return (
     <Container>
-      <p>{`Studio availability in ${parsed.name || "Sheffield Millhouses"} in hour intervals`}</p>
+      <p>{`Studio availability in ${parsed?.name || "Sheffield Millhouses"} in hour intervals`}</p>
       <p>Tap an hour block to see 15min intervals</p>
       {hours.map((_, index) => {
         const intervals = [schedule[index * 4], schedule[index * 4 + 1], schedule[index * 4 + 2], schedule[index * 4 + 3]];
