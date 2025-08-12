@@ -8,7 +8,7 @@
 
 [Workflows](https://github.com/InvisiBug/winterflowspace/actions)
 
-[Argo](https://192.168.1.61/applications/argocd/winterflowspace)
+[Argo](https://192.168.1.60/applications/argocd/winterflowspace)
 
 <!-- TODO (Feature): Update this  -->
 
