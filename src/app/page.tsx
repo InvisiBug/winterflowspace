@@ -33,6 +33,8 @@ const StudioFree: FC = async () => {
 
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
 
+  console.log("🚀 ~ StudioFree ~ parsedGymSchedule:", parsedGymSchedule);
+
   return (
     <>
       <Switcher data={parsedGymSchedule} availableGyms={availableGyms} />
