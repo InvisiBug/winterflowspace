@@ -13,10 +13,12 @@ export const GlobalStyles = createGlobalStyle`
     /* font-family: Arial, Helvetica, sans-serif; */
     /* -webkit-font-smoothing: antialiased; */
     /* -moz-osx-font-smoothing: grayscale; */
-    color: white;
+    color: red;
     /* font-family: Arial, Helvetica, sans-serif; */
     user-select: none;
     /* overflow: scroll; */
+    box-sizing: border-box;
+    transform-box: border-box;
     -ms-overflow-style: none;
     ::-webkit-scrollbar {
       display: none;
