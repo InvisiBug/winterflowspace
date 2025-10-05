@@ -1,22 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { getCurrentTimePercentage } from "./utils";
+import { getCurrentTimePercentage, formatTo12Hour } from "./utils";
 import { freeColour, busyColour } from "@/lib/colours";
 
-function formatTo12Hour(time: string) {
-  const [hourStr, minuteStr] = time.split(":");
-  let hour = parseInt(hourStr, 10);
-  const minute = minuteStr || "00";
-  const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12;
-  return `${hour}:${minute} ${ampm}`;
-}
+const Indicator: FC<Props> = ({ free, start, end }) => {
+  const timePerc = getCurrentTimePercentage(start, end);
 
-const Indicator = ({ free, start, end }) => {
   return (
-    <Container $free={free} $timePerc={getCurrentTimePercentage(start, end)}>
+    <Container $free={free} $timePerc={timePerc}>
       <StatusBadge $free={free}>{free ? "Free" : "In Use"}</StatusBadge>
-      <Line $timePerc={getCurrentTimePercentage(start, end)}></Line>
+      <Line $timePerc={timePerc}></Line>
       <Content>
         <TimeRange>{`${formatTo12Hour(start)} - ${formatTo12Hour(end)}`}</TimeRange>
       </Content>
@@ -25,6 +18,12 @@ const Indicator = ({ free, start, end }) => {
 };
 
 export default Indicator;
+
+type Props = {
+  free: boolean;
+  start: string;
+  end: string;
+};
 
 const slideIn = keyframes`
   from {
