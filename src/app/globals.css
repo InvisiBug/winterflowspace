@@ -12,6 +12,19 @@
   }
 }
 
+/* Background animation keyframes */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 html,
 body {
   max-width: 100vw;
@@ -19,11 +32,49 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  /* background: var(--background); */
-  /* font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
+  margin: 0;
+  color: #ffffff;
+  user-select: none;
+  box-sizing: border-box;
+  transform-box: border-box;
+  -ms-overflow-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  
+  /* Dark gradient background that matches hamburger menu theme */
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e293b 75%,
+    #0f172a 100%
+  );
+  
+  /* Animated gradient */
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  
+  /* Ensure full height */
+  min-height: 100vh;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Add some texture with a subtle pattern overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* TODO (Investigation): Figure out why this stuff needs to be here instead of the styled-components global [🌀-2] */

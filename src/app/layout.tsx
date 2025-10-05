@@ -29,8 +29,7 @@ export default function RootLayout({
       <html lang="en" className={inter.className}>
         <GlobalStyles />
         <body>
-          {/* <StyledComponentsRegistry>{children}</StyledComponentsRegistry> */}
-          {children}
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
         </body>
       </html>
     </>
