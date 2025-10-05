@@ -24,8 +24,6 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
     return gymIds.filter((gym) => gym.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [gymIds, searchTerm]);
 
-  console.log(parsed?.name);
-
   return (
     <>
       {isHamburgerMenuOpen ? (
@@ -43,7 +41,6 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
 
           <Links>
             {filteredGyms.map((gym) => {
-              console.log(gym);
               return (
                 <LinkItem key={gym.id}>
                   <GymName onClick={() => click(gym)}>{gym.name}</GymName>

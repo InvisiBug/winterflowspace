@@ -20,7 +20,8 @@ const Switcher: FC<Props> = ({ data, availableGyms }) => {
       <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
       <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
       {/* {width < 768 ? <MobileView data={data} /> : <Experiment data={data} />} */}
-      {width < 768 ? <MobileViewV2 data={data} /> : <Experiment data={data} />}
+      {/* {width < 768 ? <MobileViewV2 data={data} /> : <Experiment data={data} />} */}
+      <MobileViewV2 data={data} />
     </>
   );
 };

@@ -23,6 +23,7 @@ const MobileViewV2: FC<Props> = ({ data }) => {
       </Title>
 
       {openClosedTimes.map((times) => {
+        console.log("🚀 ~ MobileViewV2 ~ times:", times);
         return <Indicator free={times.free} start={times.start} end={times.end} key={`${times.start}-${times.end}`} />;
       })}
     </Container>

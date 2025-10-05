@@ -47,3 +47,12 @@ export const getOpenClosedRanges = (scheduleArr: any[]) => {
   }
   return result;
 };
+
+export const formatTo12Hour = (time: string) => {
+  const [hourStr, minuteStr] = time.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = minuteStr || "00";
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minute} ${ampm}`;
+};
