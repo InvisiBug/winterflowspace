@@ -3,11 +3,8 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { mq, px } from "src/lib/mediaQueries";
 
-import Link from "next/link";
-
 const HamburgerButton: FC<Props> = ({ setIsHamburgerMenuOpen, isHamburgerMenuOpen }) => {
   const clickHandler = () => {
-    console.log("clicked");
     setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
   };
 
@@ -97,7 +94,7 @@ const Burger = styled.div<{ $isOpen: boolean; $position: "top" | "middle" | "bot
     switch ($position) {
       case "top":
         return `
-          transform: translateY(0.25rem) rotate(45deg);
+          transform: translateY(0.5rem) rotate(45deg);
           background-color: #4ade80;
         `;
       case "middle":
@@ -107,7 +104,7 @@ const Burger = styled.div<{ $isOpen: boolean; $position: "top" | "middle" | "bot
         `;
       case "bottom":
         return `
-          transform: translateY(-0.25rem) rotate(-45deg);
+          transform: translateY(-0.5rem) rotate(-45deg);
           background-color: #4ade80;
         `;
       default:

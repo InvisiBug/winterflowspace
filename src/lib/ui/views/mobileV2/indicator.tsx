@@ -3,13 +3,13 @@ import styled, { keyframes, css } from "styled-components";
 import { getCurrentTimePercentage, formatTo12Hour } from "./utils";
 import { freeColour, busyColour } from "@/lib/colours";
 
-const Indicator: FC<Props> = ({ free, start, end }) => {
+const Indicator: FC<Props> = ({ free, start, end, timeline }) => {
   const timePerc = getCurrentTimePercentage(start, end);
 
   return (
     <Container $free={free} $timePerc={timePerc}>
       <StatusBadge $free={free}>{free ? "Free" : "In Use"}</StatusBadge>
-      <Line $timePerc={timePerc}></Line>
+      {timeline && <Line $timePerc={timePerc}></Line>}
       <Content>
         <TimeRange>{`${formatTo12Hour(start)} - ${formatTo12Hour(end)}`}</TimeRange>
       </Content>
@@ -23,6 +23,7 @@ type Props = {
   free: boolean;
   start: string;
   end: string;
+  timeline: boolean;
 };
 
 const slideIn = keyframes`

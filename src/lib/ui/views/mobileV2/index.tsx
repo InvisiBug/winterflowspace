@@ -7,9 +7,11 @@ import { getOpenClosedRanges } from "./utils";
 import Cookies from "js-cookie";
 
 const MobileViewV2: FC<Props> = ({ data }) => {
-  const dailySchedule = parseSchedule(data.activities)[0];
+  const todaysSchedule = parseSchedule(data.activities)[0];
+  const tomorrowsSchedule = parseSchedule(data.activities)[1];
 
-  const openClosedTimes = getOpenClosedRanges(dailySchedule);
+  const todayTimes = getOpenClosedRanges(todaysSchedule);
+  const tomorrowTimes = getOpenClosedRanges(tomorrowsSchedule);
 
   const val = Cookies.get("userGym");
 
@@ -19,12 +21,21 @@ const MobileViewV2: FC<Props> = ({ data }) => {
     <Container>
       <Title>
         <TitleText>Studio Availability</TitleText>
-        <GymName>{parsed?.name || "Sheffield Millhouses"}</GymName>
+        {parsed?.name && <GymName>{parsed.name}</GymName>}
       </Title>
 
-      {openClosedTimes.map((times) => {
-        console.log("🚀 ~ MobileViewV2 ~ times:", times);
-        return <Indicator free={times.free} start={times.start} end={times.end} key={`${times.start}-${times.end}`} />;
+      {todayTimes.map((times) => {
+        return <Indicator free={times.free} start={times.start} end={times.end} timeline={true} key={`${times.start}-${times.end}`} />;
+      })}
+
+      <DaySpacer>
+        <SpacerLine />
+        <SpacerText>Tomorrow</SpacerText>
+        <SpacerLine />
+      </DaySpacer>
+
+      {tomorrowTimes.map((times) => {
+        return <Indicator free={times.free} start={times.start} end={times.end} timeline={false} key={`tomorrow-${times.start}-${times.end}`} />;
       })}
     </Container>
   );
@@ -90,4 +101,35 @@ const GymName = styled.h2`
 
   /* Subtle glow effect */
   text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+`;
+
+const DaySpacer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 3rem 0 2rem 0;
+  gap: 1rem;
+`;
+
+const SpacerLine = styled.div`
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+`;
+
+const SpacerText = styled.div`
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.1);
 `;

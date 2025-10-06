@@ -32,7 +32,6 @@ const StudioFree: FC = async () => {
   const parsed = JSON.parse(decodeURIComponent(usersGym.value));
   const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${parsed.id}/scheduled-class`, { cache: "no-store" });
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
-
   console.log("🚀 ~ StudioFree ~ parsedGymSchedule:", parsedGymSchedule);
 
   return (
