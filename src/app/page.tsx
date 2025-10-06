@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { Gym } from "@/lib/types/schedule";
 import Switcher from "@/lib/ui/switcher";
 import { AvailableGyms, GymData } from "@/lib/types/gyms";
-import LandingPage from "@/components/LandingPage";
+import LandingPage from "@/lib/ui/LandingPage";
 
 const StudioFree: FC = async () => {
   //* Get and format the list of available gyms
@@ -32,7 +32,6 @@ const StudioFree: FC = async () => {
   const parsed = JSON.parse(decodeURIComponent(usersGym.value));
   const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${parsed.id}/scheduled-class`, { cache: "no-store" });
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
-  console.log("🚀 ~ StudioFree ~ parsedGymSchedule:", parsedGymSchedule);
 
   return (
     <>
