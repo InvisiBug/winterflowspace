@@ -14,7 +14,6 @@ const MobileViewV2: FC<Props> = ({ data }) => {
   const tomorrowTimes = getOpenClosedRanges(tomorrowsSchedule);
 
   const val = Cookies.get("userGym");
-
   const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
 
   return (
@@ -50,13 +49,16 @@ export default MobileViewV2;
 const borders = false;
 
 const Container = styled.div`
-  /* border: ${borders ? "1px solid red" : "none"}; */
+  border: ${borders ? "1px solid white" : "none"};
   color: #fbfffe;
 
   width: 100svw;
   min-height: 100svh;
-  padding: 15vw;
-  padding-top: 5rem;
+  padding: 5rem 30vw 2vw 30vw;
+
+  @media (max-width: 1200px) {
+    padding: 5rem 15vw 5vw 15vw;
+  }
 
   display: flex;
   flex-direction: column;
