@@ -56,7 +56,7 @@ const Container = styled.div`
   min-height: 100svh;
   padding: 5rem 30vw 2vw 30vw;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     padding: 5rem 15vw 5vw 15vw;
   }
 
