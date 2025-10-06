@@ -14,6 +14,7 @@ interface Schedule {
 }
 
 const debug = false;
+
 export const parseSchedule = (data: ActivitiesEntity[]) => {
   if (debug) console.log(data);
   const numDays = 5;

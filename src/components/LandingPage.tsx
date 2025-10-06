@@ -4,13 +4,15 @@ import styled, { keyframes, css } from "styled-components";
 import { AvailableGyms } from "@/lib/types/gyms";
 import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
 
-interface Props {
-  availableGyms: AvailableGyms;
-}
+const tiles = [
+  { icon: "🏃‍♂️", title: "Real-Time Tracking", description: "Live studio availability updates showing exactly when studios are free" },
+  { icon: "📍", title: "Any Pure Gym", description: "Choose from hundreds of Pure Gym locations across the UK" },
+  { icon: "⏰", title: "Smart Scheduling", description: "Plan your workouts around studio class schedules and free periods" },
+];
 
 const LandingPage: FC<Props> = ({ availableGyms }) => {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState(false); // Fixes hydration error by holding off rendering until on client
 
   useEffect(() => {
     setIsClient(true);
@@ -29,30 +31,21 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
         <Hero $isClient={isClient}>
           <MainTitle>Winter Flow Space</MainTitle>
           <Subtitle>Pure Gym Studio Availability Tracker</Subtitle>
+          <Subtitle>Open the menu to select your gym</Subtitle>
           <Description>Discover when your favorite Pure Gym studio is free. Track real-time availability and plan your workouts around studio schedules at any Pure Gym location.</Description>
 
           <FeatureGrid>
-            <FeatureCard>
-              <FeatureIcon>🏃‍♂️</FeatureIcon>
-              <FeatureTitle>Real-Time Tracking</FeatureTitle>
-              <FeatureDescription>Live studio availability updates showing exactly when studios are free</FeatureDescription>
-            </FeatureCard>
-
-            <FeatureCard>
-              <FeatureIcon>📍</FeatureIcon>
-              <FeatureTitle>Any Pure Gym</FeatureTitle>
-              <FeatureDescription>Choose from hundreds of Pure Gym locations across the UK</FeatureDescription>
-            </FeatureCard>
-
-            <FeatureCard>
-              <FeatureIcon>⏰</FeatureIcon>
-              <FeatureTitle>Smart Scheduling</FeatureTitle>
-              <FeatureDescription>Plan your workouts around studio class schedules and free periods</FeatureDescription>
-            </FeatureCard>
+            {tiles.map((tile) => (
+              <FeatureCard key={tile.title}>
+                <FeatureIcon>{tile.icon}</FeatureIcon>
+                <FeatureTitle>{tile.title}</FeatureTitle>
+                <FeatureDescription>{tile.description}</FeatureDescription>
+              </FeatureCard>
+            ))}
           </FeatureGrid>
 
           <GetStartedSection>
-            <GetStartedTitle>Ready to optimize your gym time?</GetStartedTitle>
+            <GetStartedTitle>Ready to start?</GetStartedTitle>
             <GetStartedDescription>Use the menu in the top-left corner to select your Pure Gym and start tracking studio availability.</GetStartedDescription>
             <MenuIndicator $isClient={isClient}>☰</MenuIndicator>
           </GetStartedSection>
@@ -63,6 +56,10 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
 };
 
 export default LandingPage;
+
+interface Props {
+  availableGyms: AvailableGyms;
+}
 
 const fadeIn = keyframes`
   from {

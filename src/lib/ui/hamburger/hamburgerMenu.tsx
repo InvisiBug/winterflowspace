@@ -7,11 +7,9 @@ import { AvailableGyms } from "@/lib/types/gyms";
 
 const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("🚀 ~ isHamburgerMenuOpen:", isHamburgerMenuOpen);
 
-  const val = Cookies.get("userGym");
-
-  const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
+  const gymCookie = Cookies.get("userGym");
+  const savedGym = gymCookie ? JSON.parse(decodeURIComponent(gymCookie)) : null;
 
   const click = (gym: { name: string; id: string }) => {
     Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })));
@@ -30,9 +28,11 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
         <Container>
           <Header>
             <Title>Select Your Gym</Title>
-            <CurrentSelection>
-              Currently selected: <SelectedGym>{parsed?.name || "Sheffield Millhouses"}</SelectedGym>
-            </CurrentSelection>
+            {savedGym?.name && (
+              <CurrentSelection>
+                Currently selected: <SelectedGym>{savedGym.name}</SelectedGym>
+              </CurrentSelection>
+            )}
           </Header>
 
           <SearchContainer>
