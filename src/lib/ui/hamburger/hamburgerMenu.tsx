@@ -12,7 +12,7 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
   const savedGym = gymCookie ? JSON.parse(decodeURIComponent(gymCookie)) : null;
 
   const click = (gym: { name: string; id: string }) => {
-    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })));
+    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })), { expires: 365 * 20 });
     window.location.reload();
   };
 
