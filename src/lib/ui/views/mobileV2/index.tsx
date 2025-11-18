@@ -6,7 +6,7 @@ import { parseSchedule } from "@/lib/utils";
 import { getOpenClosedRanges } from "./utils";
 import Cookies from "js-cookie";
 
-const MobileViewV2: FC<Props> = ({ data }) => {
+const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
   const todaysSchedule = parseSchedule(data.activities)[0];
   const tomorrowsSchedule = parseSchedule(data.activities)[1];
 
@@ -21,6 +21,12 @@ const MobileViewV2: FC<Props> = ({ data }) => {
       <Title>
         <TitleText>Studio Availability</TitleText>
         {parsed?.name && <GymName>{parsed.name}</GymName>}
+        {peopleInGym !== undefined && (
+          <PeopleCount>
+            <PeopleIcon>👥</PeopleIcon>
+            <PeopleText>{peopleInGym} people currently in gym</PeopleText>
+          </PeopleCount>
+        )}
       </Title>
 
       {todayTimes.map((times) => {
@@ -42,6 +48,7 @@ const MobileViewV2: FC<Props> = ({ data }) => {
 
 type Props = {
   data: Gym;
+  peopleInGym: number;
 };
 
 export default MobileViewV2;
@@ -134,4 +141,37 @@ const SpacerText = styled.div`
   box-shadow:
     0 4px 8px rgba(0, 0, 0, 0.2),
     0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const PeopleCount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(30, 41, 59, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  /* border: 1px solid rgba(74, 222, 128, 0.3); */
+  border-radius: 12px;
+
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(74, 222, 128, 0.1);
+`;
+
+const PeopleIcon = styled.span`
+  font-size: 1.25rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+`;
+
+const PeopleText = styled.span`
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+
+  /* Subtle glow effect */
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
 `;
