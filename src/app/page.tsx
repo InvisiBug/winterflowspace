@@ -5,6 +5,7 @@ import { Gym } from "@/lib/types/schedule";
 import Switcher from "@/lib/ui/switcher";
 import { AvailableGyms, GymData } from "@/lib/types/gyms";
 import LandingPage from "@/lib/ui/LandingPage";
+import { getTotalUsers } from "@/lib/api";
 
 const StudioFree: FC = async () => {
   //* Get and format the list of available gyms
@@ -13,7 +14,7 @@ const StudioFree: FC = async () => {
 
   const availableGyms: AvailableGyms = [];
 
-  // Format the available gyms data
+  //* Format the available gyms data
   formattedAvailableGymResponse.data.allGym.nodes?.forEach((gym) => {
     availableGyms.push({ name: gym.name, id: gym.gymId });
     availableGyms.sort((a, b) => a.name.localeCompare(b.name));
@@ -28,14 +29,27 @@ const StudioFree: FC = async () => {
     return <LandingPage availableGyms={availableGyms} />;
   }
 
-  // If gym is selected, fetch data and show switcher
+  //* If gym is selected, fetch data and show switcher
   const parsed = JSON.parse(decodeURIComponent(usersGym.value));
   const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${parsed.id}/scheduled-class`, { cache: "no-store" });
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
 
+  const credentialsCookie = cookieStore.get("credentials");
+  let username = "";
+  let password = "";
+
+  let totalUsers = undefined;
+
+  if (credentialsCookie) {
+    const { username: savedUsername, pin: savedPin } = JSON.parse(decodeURIComponent(credentialsCookie.value));
+    username = savedUsername;
+    password = savedPin;
+    totalUsers = await getTotalUsers(username, password, parsed.id);
+  }
+
   return (
     <>
-      <Switcher data={parsedGymSchedule} availableGyms={availableGyms} />
+      <Switcher data={parsedGymSchedule} availableGyms={availableGyms} peopleInGym={totalUsers} />
     </>
   );
 };

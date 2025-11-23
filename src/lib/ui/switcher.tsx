@@ -7,7 +7,7 @@ import { MobileViewV2 } from "@/lib/ui/views";
 import { AvailableGyms } from "../types/gyms";
 import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
 
-const Switcher: FC<Props> = ({ data, availableGyms }) => {
+const Switcher: FC<Props> = ({ data, availableGyms, peopleInGym }) => {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const { width, height } = deviceDimensions();
@@ -22,7 +22,7 @@ const Switcher: FC<Props> = ({ data, availableGyms }) => {
       {/* {width < 768 ? <MobileView data={data} /> : <Experiment data={data} />} */}
       {/* {width < 768 ? <MobileViewV2 data={data} /> : <Experiment data={data} />} */}
       {/* <Experiment data={data} /> */}
-      <MobileViewV2 data={data} />
+      <MobileViewV2 data={data} peopleInGym={peopleInGym} />
     </>
   );
 };
@@ -30,6 +30,7 @@ const Switcher: FC<Props> = ({ data, availableGyms }) => {
 type Props = {
   data: Gym;
   availableGyms: AvailableGyms;
+  peopleInGym?: number;
 };
 
 export default Switcher;
