@@ -30,7 +30,7 @@ const Switcher: FC<Props> = ({ data, availableGyms, peopleInGym }) => {
 type Props = {
   data: Gym;
   availableGyms: AvailableGyms;
-  peopleInGym: number;
+  peopleInGym?: number;
 };
 
 export default Switcher;

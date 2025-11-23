@@ -1,8 +1,8 @@
-export const getTotalUsers = async (gymId) => {
+export const getTotalUsers = async (username, password, gymId) => {
   const data = {
     grant_type: "password",
-    username: "",
-    password: "",
+    username: username,
+    password: password,
     scope: "pgcapi",
     client_id: "ro.client",
   };
@@ -20,21 +20,19 @@ export const getTotalUsers = async (gymId) => {
     body: new URLSearchParams(data).toString(),
   });
   const jsonResponse = await loginToken.json();
-  // console.log("🚀 ~ StudioFree ~ loginToken:", jsonResponse.access_token);
 
   headers.Authorization = `Bearer ${jsonResponse.access_token}`;
 
   // console.log(headers);
 
-  const test = await fetch(`https://capi.puregym.com/api/v2/gymSessions/gym?gymId=${gymId}`, {
+  const gymData = await fetch(`https://capi.puregym.com/api/v2/gymSessions/gym?gymId=${gymId}`, {
     cache: "no-store",
     headers,
   });
-  // console.log("🚀 ~ StudioFree ~ test:", test);
-  const testJson = await test.json();
-  console.log("🚀 ~ StudioFree ~ testJson:", testJson);
 
-  const result = testJson.TotalPeopleInGym;
+  const parsedGymData = await gymData.json();
+
+  const result = parsedGymData.TotalPeopleInGym;
 
   console.log(result);
 

@@ -24,7 +24,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
         {peopleInGym !== undefined && (
           <PeopleCount>
             <PeopleIcon>👥</PeopleIcon>
-            <PeopleText>{peopleInGym} people currently in gym</PeopleText>
+            <PeopleText>{peopleInGym} people currently in the gym</PeopleText>
           </PeopleCount>
         )}
       </Title>
@@ -48,7 +48,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
 
 type Props = {
   data: Gym;
-  peopleInGym: number;
+  peopleInGym?: number;
 };
 
 export default MobileViewV2;
