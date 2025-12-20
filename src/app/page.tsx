@@ -44,7 +44,8 @@ const StudioFree: FC = async () => {
     const { username: savedUsername, pin: savedPin } = JSON.parse(decodeURIComponent(credentialsCookie.value));
     username = savedUsername;
     password = savedPin;
-    totalUsers = await getTotalUsers(username, password, parsed.id);
+    // totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
+    totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
   }
 
   return (
