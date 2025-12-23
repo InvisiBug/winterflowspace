@@ -35,22 +35,22 @@ const StudioFree: FC = async () => {
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
 
   const credentialsCookie = cookieStore.get("credentials");
-  let username = "";
-  let password = "";
+  // let username = "";
+  // let password = "";
 
-  let totalUsers = undefined;
+  // let totalUsers = undefined;
 
-  if (credentialsCookie) {
-    const { username: savedUsername, pin: savedPin } = JSON.parse(decodeURIComponent(credentialsCookie.value));
-    username = savedUsername;
-    password = savedPin;
-    // totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
-    totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
-  }
+  // if (credentialsCookie) {
+  //   const { username: savedUsername, pin: savedPin } = JSON.parse(decodeURIComponent(credentialsCookie.value));
+  //   username = savedUsername;
+  //   password = savedPin;
+  //   // totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
+  //   totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
+  // }
 
   return (
     <>
-      <Switcher data={parsedGymSchedule} availableGyms={availableGyms} peopleInGym={totalUsers} />
+      <Switcher data={parsedGymSchedule} availableGyms={availableGyms} peopleInGym={200} />
     </>
   );
 };
