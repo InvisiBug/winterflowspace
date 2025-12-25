@@ -34,18 +34,13 @@ const StudioFree: FC = async () => {
   const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${parsed.id}/scheduled-class`, { cache: "no-store" });
   const parsedGymSchedule: Gym = await rawGymSchedule.json();
 
-  const credentialsCookie = cookieStore.get("credentials");
-  let username = "";
-  let password = "";
+  //* Get total users in gym if access token cookie exists
+  const accessTokenCookie = cookieStore.get("accessToken");
 
   let totalUsers = undefined;
 
-  if (credentialsCookie) {
-    const { username: savedUsername, pin: savedPin } = JSON.parse(decodeURIComponent(credentialsCookie.value));
-    username = savedUsername;
-    password = savedPin;
-    // totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
-    totalUsers = (await getTotalUsers(username, password, parsed.id)) || 0;
+  if (accessTokenCookie) {
+    totalUsers = (await getTotalUsers(JSON.parse(decodeURIComponent(accessTokenCookie.value)), parsed.id)) || 0;
   }
 
   return (
