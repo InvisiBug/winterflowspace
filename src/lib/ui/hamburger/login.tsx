@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { login } from "./utils";
+import { login } from "@/lib/api";
 
 const Login: FC = () => {
   const [username, setUsername] = useState("");
@@ -13,12 +13,13 @@ const Login: FC = () => {
 
   // Check for saved credentials on component mount
   useEffect(() => {
-    const savedCredentials = Cookies.get("credentials");
+    const accessToken = Cookies.get("accessToken") || "";
+    const userName = Cookies.get("username") || "";
 
-    if (savedCredentials) {
-      const { username, pin } = JSON.parse(decodeURIComponent(savedCredentials));
-      // setUsername(username);
-      // setPassword(pin);
+    if (accessToken) {
+      const username = JSON.parse(decodeURIComponent(userName));
+
+      setUsername(username);
       setIsCredentialsSaved(true);
     }
   }, []);
@@ -26,17 +27,19 @@ const Login: FC = () => {
   const handleSaveCredentials = async () => {
     if (username.trim() && password.trim()) {
       const token = await login(username.trim(), password.trim());
-      console.log(token);
-      // Cookies.set("token", encodeURIComponent(JSON.stringify({ token: await login(username.trim(), password.trim()) })));
-      // Cookies.set("credentials", encodeURIComponent(JSON.stringify({ username: username.trim(), pin: password.trim() })), { expires: 365 * 20 });
+
+      Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })));
+      Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())));
+
       setIsCredentialsSaved(true);
       setShowCredentialsForm(false);
     }
-    // window.location.reload();
+    window.location.reload();
   };
 
   const handleClearCredentials = () => {
-    Cookies.remove("credentials");
+    Cookies.remove("accessToken");
+    Cookies.remove("username");
 
     setUsername("");
     setPassword("");
