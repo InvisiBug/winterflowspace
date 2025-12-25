@@ -1,4 +1,4 @@
-export interface Gym {
+export interface Schedule {
   activities: ActivitiesEntity[];
 }
 
@@ -39,4 +39,10 @@ export interface ExtraErrorInfo {
 export interface GymAccessSlot {
   isRequired: boolean;
   isBooked: boolean;
+}
+
+export interface ClassData {
+  start: string;
+  end: string;
+  duration?: number;
 }

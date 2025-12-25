@@ -1,17 +1,20 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import Indicator from "./indicator";
-import { Gym } from "@/lib/types/schedule";
+import { Schedule } from "@/lib/types/schedule";
 import { parseSchedule } from "@/lib/utils";
 import { getOpenClosedRanges } from "./utils";
 import Cookies from "js-cookie";
 
 const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
   const todaysSchedule = parseSchedule(data.activities)[0];
+
   const tomorrowsSchedule = parseSchedule(data.activities)[1];
+  console.log("🚀 ~ MobileViewV2 ~ tomorrowsSchedule:", tomorrowsSchedule);
 
   const todayTimes = getOpenClosedRanges(todaysSchedule);
   const tomorrowTimes = getOpenClosedRanges(tomorrowsSchedule);
+  console.log("🚀 ~ MobileViewV2 ~ tomorrowTimes:", tomorrowTimes);
 
   const val = Cookies.get("userGym");
   const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
@@ -47,7 +50,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
 };
 
 type Props = {
-  data: Gym;
+  data: Schedule;
   peopleInGym?: number;
 };
 

@@ -1,4 +1,6 @@
-import { Gym, ActivitiesEntity } from "@/lib/types/schedule";
+import { ActivitiesEntity, ClassData } from "@/lib/types/schedule";
+
+const debug = false;
 
 export const getCurrentHour = () => {
   const date = new Date();
@@ -6,23 +8,14 @@ export const getCurrentHour = () => {
   return hours;
 };
 
-// TODO (Fix): Move to types file
-interface Schedule {
-  start: string;
-  end: string;
-  duration?: number;
-}
-
-const debug = false;
-
 export const parseSchedule = (data: ActivitiesEntity[]) => {
   if (debug) console.log(data);
   const numDays = 5;
-  const busySchedule: Schedule[][] = [];
+  const busySchedule: ClassData[][] = [];
 
   //* Create an array of times the studio is in use over the next 3 days
   Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
-    const todaysSchedule = new Array<Schedule>();
+    const todaysSchedule = new Array<ClassData>();
 
     data.forEach((element: ActivitiesEntity) => {
       if (element.studio === "Studio" || element.studio === "Functional Area") {
@@ -73,7 +66,7 @@ export const parseSchedule = (data: ActivitiesEntity[]) => {
  * * note: There's a really annoying point where classes don't start or finish on the hour or on the half hour example, 7:35
  * * This cause problems with the mark timeline function, which is why the Math.floor is in place
  */
-export function markTimeline(studioInUseToday: Schedule[]): number[] {
+export function markTimeline(studioInUseToday: ClassData[]): number[] {
   // Initialize the timeline
   const timeline = new Array<number>((24 * 60) / 15).fill(0);
 
