@@ -2,8 +2,6 @@ import { AvailableGyms, GymData } from "@/lib/types/gyms";
 import { Schedule } from "@/lib/types/schedule";
 
 export const getSchedule = async (selectedGym: { name: string; id: string }) => {
-  console.log("🚀 ~ getSchedule ~ selectedGym:", selectedGym);
-
   const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${selectedGym.id}/scheduled-class`, { cache: "no-store" });
   const gymSchedule: Schedule = await rawGymSchedule.json();
 
@@ -38,13 +36,10 @@ export const getTotalUsers = async (token: string, gymId: string) => {
     cache: "no-store",
     headers,
   });
-  console.log("🚀 ~ getTotalUsers ~ gymData:", gymData);
 
   const parsedGymData = await gymData.json();
 
   const result = parsedGymData.TotalPeopleInGym;
-
-  console.log(result);
 
   return result;
 };

@@ -7,14 +7,12 @@ import { getOpenClosedRanges } from "./utils";
 import Cookies from "js-cookie";
 
 const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
+  // TODO (Improvement): Rework the data parsing as it still uses the old mark timeline method
   const todaysSchedule = parseSchedule(data.activities)[0];
-
   const tomorrowsSchedule = parseSchedule(data.activities)[1];
-  console.log("🚀 ~ MobileViewV2 ~ tomorrowsSchedule:", tomorrowsSchedule);
 
   const todayTimes = getOpenClosedRanges(todaysSchedule);
   const tomorrowTimes = getOpenClosedRanges(tomorrowsSchedule);
-  console.log("🚀 ~ MobileViewV2 ~ tomorrowTimes:", tomorrowTimes);
 
   const val = Cookies.get("userGym");
   const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;

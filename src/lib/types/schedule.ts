@@ -1,4 +1,5 @@
 export interface Schedule {
+  status: number;
   activities: ActivitiesEntity[];
 }
 

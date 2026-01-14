@@ -11,15 +11,11 @@ const run = async () => {
     id: string;
   };
 
-  // console.log(data.data.allGym.nodes);
-
   if (!data.data.allGym.nodes) return;
 
   data.data.allGym.nodes.forEach((gym) => {
     gyms.push({ name: gym.name, id: gym.gymId });
   });
-
-  console.log(gyms);
 };
 
 run();

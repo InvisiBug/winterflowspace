@@ -28,11 +28,12 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
       {isHamburgerMenuOpen ? (
         <Container>
           <Header>
-            <Title>Select Your Gym</Title>
+            <Title>Your Gym</Title>
             {savedGym?.name && (
-              <CurrentSelection>
-                Currently selected: <SelectedGym>{savedGym.name}</SelectedGym>
-              </CurrentSelection>
+              <Selection>
+                <CurrentSelection>Currently selected:</CurrentSelection>
+                <SelectedGym>{savedGym.name}</SelectedGym>
+              </Selection>
             )}
           </Header>
           <Login />
@@ -91,6 +92,8 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
+  width: 100%;
+  text-align: center;
   color: white;
   font-size: 1.5rem;
   font-weight: 600;
@@ -103,6 +106,17 @@ const CurrentSelection = styled.p`
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.4;
+`;
+
+const Selection = styled.div`
+  padding-top: 0.5rem;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  text-align: right;
 `;
 
 const SelectedGym = styled.span`
