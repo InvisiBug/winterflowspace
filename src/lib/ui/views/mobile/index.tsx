@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import Indicator from "./indicator";
-import { Gym } from "@/lib/types/schedule";
+import { Schedule } from "@/lib/types/schedule";
 import { parseSchedule } from "@/lib/utils";
 import { getOpenClosedRanges } from "./utils";
 import Cookies from "js-cookie";
 
 const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
+  // TODO (Improvement): Rework the data parsing as it still uses the old mark timeline method
   const todaysSchedule = parseSchedule(data.activities)[0];
   const tomorrowsSchedule = parseSchedule(data.activities)[1];
 
@@ -47,7 +48,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
 };
 
 type Props = {
-  data: Gym;
+  data: Schedule;
   peopleInGym?: number;
 };
 
