@@ -58,13 +58,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge test-release -> main
+      - name: Merge test-release -> test
         uses: devmasx/merge-branch@master
         with:
           type: now
           message: New app version created '${{ github.sha }}'
           from_branch: test-release
-          target_branch: main
+          target_branch: test
           github_token: ${{ secrets.ACCESS_TOKEN }}
 
   sync-dev:
@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge test-release -> main
+      - name: Merge test-release -> test
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: main
+          from_branch: test
           message: fast-forward dev
           target_branch: dev
           github_token: ${{ secrets.ACCESS_TOKEN }}
