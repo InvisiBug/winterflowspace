@@ -18,7 +18,8 @@ export const parseSchedule = (data: ActivitiesEntity[]) => {
     const todaysSchedule = new Array<ClassData>();
 
     data.forEach((element: ActivitiesEntity) => {
-      if (element.studio === "Studio" || element.studio === "Functional Area") {
+      // if (element.studio === "Studio" || element.studio === "Functional Area") {
+      if (element.studio === "Studio") {
         const rawStartTime = element.startDateTime.dateTime.replace("T", " "); // They keep changing the date format so pulled it out here
         const d = new Date();
 
