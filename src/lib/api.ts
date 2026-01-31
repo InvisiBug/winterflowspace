@@ -3,7 +3,7 @@ import { Schedule } from "@/lib/types/schedule";
 const env = import.meta.env;
 
 // const API_BASE_URL = "http://Dlocalhost:3000";
-const API_BASE_URL = env.VITE_SOCKET ?? "";
+const API_BASE_URL = env.VITE_API ?? "";
 
 export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
   if (!selectedGym) return null;
