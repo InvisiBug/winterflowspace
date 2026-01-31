@@ -8,7 +8,7 @@ ENV VITE_API=https://api.winterflowspace.com/
 RUN npm install
 RUN npm run build
 
-FROM  arm64v8/nginx
+FROM arm64v8/nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf  /etc/nginx/conf.d
 EXPOSE 3000
