@@ -10,7 +10,6 @@ const StudioFree: FC = () => {
   const [availableGyms, setAvailableGyms] = useState(null);
   const [usersGym, setUsersGym] = useState(null);
   const [schedule, setSchedule] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
   const [totalOccupants, setTotalOccupants] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,6 @@ const StudioFree: FC = () => {
       //? Get all gyms
       const gyms = await getAllGyms();
       setAvailableGyms(gyms);
-      // console.log("🚀 ~ fetchData ~ availableGyms:", gyms);
 
       //? Get users gym from cookies and save to state if it exists
       const usersGymCookie = Cookies.get("userGym");
@@ -37,11 +35,9 @@ const StudioFree: FC = () => {
         //? Get the schedule for the user's gym
         const classSchedule = await getSchedule(selectedGym); //* raw at this point
         setSchedule(classSchedule);
-        console.log(schedule);
 
         if (accessTokenCookie) {
           const token = accessTokenCookie ? JSON.parse(decodeURIComponent(accessTokenCookie)).token : null;
-          setAccessToken(token);
 
           setTotalOccupants((await getTotalUsers(token, selectedGym.id)) || 0);
         }
@@ -117,12 +113,6 @@ const StudioFree: FC = () => {
   return (
     <Layout>
       <Switcher data={schedule} availableGyms={availableGyms} peopleInGym={totalOccupants || 0} />
-    </Layout>
-  );
-
-  return (
-    <Layout>
-      <h1>Studio Free Coming Soon!</h1>
     </Layout>
   );
 };

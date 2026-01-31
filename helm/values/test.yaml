@@ -1,0 +1,26 @@
+name: winterflowspace-test
+
+namespace: flowception
+env:
+  APP_VERSION: 51712d52e387490cce09f1b46f348332acede91a
+
+deployment:
+  - name: winterflowspace-test
+    image: invisibug/winterflowspace-test
+    ports:
+      - port: 80
+    # env:
+    # Handled in Dockerfile.argo.test
+
+ingress:
+  - name: test.winterflowspace.com
+    selector: winterflowspace-test
+    path: /
+    port: 80
+    host: test.winterflowspace.com
+
+service:
+  loadBalancer:
+    - name: winterflowspace-test
+      selector: winterflowspace-test
+      port: 80
