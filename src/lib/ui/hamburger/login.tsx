@@ -29,14 +29,8 @@ const Login: FC = () => {
       try {
         const token = await login(username.trim(), password.trim());
 
-        Cookies.set(
-          "accessToken",
-          encodeURIComponent(JSON.stringify({ token })),
-        );
-        Cookies.set(
-          "username",
-          encodeURIComponent(JSON.stringify(username.trim())),
-        );
+        Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })));
+        Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())));
 
         setIsCredentialsSaved(true);
         setShowCredentialsForm(false);
@@ -62,19 +56,13 @@ const Login: FC = () => {
     setShowCredentialsForm(false);
   }, []);
 
-  const handleUsernameChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUsername(e.target.value);
-    },
-    [],
-  );
+  const handleUsernameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  }, []);
 
-  const handlePasswordChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-    },
-    [],
-  );
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
 
   const toggleCredentialsForm = useCallback(() => {
     setShowCredentialsForm(!showCredentialsForm);
@@ -84,42 +72,23 @@ const Login: FC = () => {
     <CredentialsSection>
       <CredentialsHeader>
         <CredentialsTitle>🔑 Pure Gym Credentials</CredentialsTitle>
-        {!isCredentialsSaved ? (
-          <ToggleButton onClick={toggleCredentialsForm}>
-            {showCredentialsForm ? "➖" : "➕"}
-          </ToggleButton>
-        ) : (
-          <StatusIndicator>✅</StatusIndicator>
-        )}
+        {!isCredentialsSaved ? <ToggleButton onClick={toggleCredentialsForm}>{showCredentialsForm ? "➖" : "➕"}</ToggleButton> : <StatusIndicator>✅</StatusIndicator>}
       </CredentialsHeader>
 
       {showCredentialsForm && !isCredentialsSaved && (
         <CredentialsForm>
           <FormGroup>
             <FormLabel>Username/Email</FormLabel>
-            <FormInput
-              type="email"
-              placeholder="your.email@example.com"
-              value={username}
-              onChange={handleUsernameChange}
-            />
+            <FormInput type="email" placeholder="your.email@example.com" value={username} onChange={handleUsernameChange} />
           </FormGroup>
 
           <FormGroup>
             <FormLabel>Password</FormLabel>
-            <FormInput
-              type="password"
-              placeholder="Your Pin"
-              value={password}
-              onChange={handlePasswordChange}
-            />
+            <FormInput type="password" placeholder="Your Pin" value={password} onChange={handlePasswordChange} />
           </FormGroup>
 
           <FormButtons>
-            <SaveCredentialsButton
-              onClick={handleSaveCredentials}
-              disabled={!username.trim() || !password.trim()}
-            >
+            <SaveCredentialsButton onClick={handleSaveCredentials} disabled={!username.trim() || !password.trim()}>
               💾 Save
             </SaveCredentialsButton>
           </FormButtons>
@@ -129,9 +98,7 @@ const Login: FC = () => {
       {isCredentialsSaved && (
         <SavedCredentialsInfo>
           <SavedText>Saved: {username}</SavedText>
-          <ClearCredentialsButton onClick={handleClearCredentials}>
-            🗑️ Clear
-          </ClearCredentialsButton>
+          <ClearCredentialsButton onClick={handleClearCredentials}>🗑️ Clear</ClearCredentialsButton>
         </SavedCredentialsInfo>
       )}
     </CredentialsSection>
