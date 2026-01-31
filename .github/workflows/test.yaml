@@ -71,17 +71,17 @@ jobs:
           target_branch: test
           github_token: ${{ secrets.ACCESS_TOKEN }}
 
-  # sync-dev:
-  #   needs: deploy-to-test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@master
+  sync-dev:
+    needs: deploy-to-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
 
-  #     - name: Merge test-release -> test
-  #       uses: devmasx/merge-branch@master
-  #       with:
-  #         type: now
-  #         from_branch: test
-  #         message: fast-forward dev
-  #         target_branch: dev
-  #         github_token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Merge test-release -> test
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: test
+          message: fast-forward dev
+          target_branch: dev
+          github_token: ${{ secrets.ACCESS_TOKEN }}
