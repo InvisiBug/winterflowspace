@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
@@ -24,20 +24,35 @@ const Login: FC = () => {
     }
   }, []);
 
-  const handleSaveCredentials = async () => {
+  const handleSaveCredentials = useCallback(async () => {
     if (username.trim() && password.trim()) {
-      const token = await login(username.trim(), password.trim());
+      try {
+        const token = await login(username.trim(), password.trim());
 
-      Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })));
-      Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())));
+        Cookies.set(
+          "accessToken",
+          encodeURIComponent(JSON.stringify({ token })),
+        );
+        Cookies.set(
+          "username",
+          encodeURIComponent(JSON.stringify(username.trim())),
+        );
 
-      setIsCredentialsSaved(true);
-      setShowCredentialsForm(false);
+        setIsCredentialsSaved(true);
+        setShowCredentialsForm(false);
+
+        // Small delay to ensure state is updated before reload
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      } catch (error) {
+        console.error("Login failed:", error);
+        // Handle error appropriately - could show error message to user
+      }
     }
-    window.location.reload();
-  };
+  }, [username, password]);
 
-  const handleClearCredentials = () => {
+  const handleClearCredentials = useCallback(() => {
     Cookies.remove("accessToken");
     Cookies.remove("username");
 
@@ -45,29 +60,66 @@ const Login: FC = () => {
     setPassword("");
     setIsCredentialsSaved(false);
     setShowCredentialsForm(false);
-  };
+  }, []);
+
+  const handleUsernameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUsername(e.target.value);
+    },
+    [],
+  );
+
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
+    },
+    [],
+  );
+
+  const toggleCredentialsForm = useCallback(() => {
+    setShowCredentialsForm(!showCredentialsForm);
+  }, [showCredentialsForm]);
 
   return (
     <CredentialsSection>
       <CredentialsHeader>
         <CredentialsTitle>🔑 Pure Gym Credentials</CredentialsTitle>
-        {!isCredentialsSaved ? <ToggleButton onClick={() => setShowCredentialsForm(!showCredentialsForm)}>{showCredentialsForm ? "➖" : "➕"}</ToggleButton> : <StatusIndicator>✅</StatusIndicator>}
+        {!isCredentialsSaved ? (
+          <ToggleButton onClick={toggleCredentialsForm}>
+            {showCredentialsForm ? "➖" : "➕"}
+          </ToggleButton>
+        ) : (
+          <StatusIndicator>✅</StatusIndicator>
+        )}
       </CredentialsHeader>
 
       {showCredentialsForm && !isCredentialsSaved && (
         <CredentialsForm>
           <FormGroup>
             <FormLabel>Username/Email</FormLabel>
-            <FormInput type="email" placeholder="your.email@example.com" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <FormInput
+              type="email"
+              placeholder="your.email@example.com"
+              value={username}
+              onChange={handleUsernameChange}
+            />
           </FormGroup>
 
           <FormGroup>
             <FormLabel>Password</FormLabel>
-            <FormInput type="password" placeholder="Your Pin" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <FormInput
+              type="password"
+              placeholder="Your Pin"
+              value={password}
+              onChange={handlePasswordChange}
+            />
           </FormGroup>
 
           <FormButtons>
-            <SaveCredentialsButton onClick={handleSaveCredentials} disabled={!username.trim() || !password.trim()}>
+            <SaveCredentialsButton
+              onClick={handleSaveCredentials}
+              disabled={!username.trim() || !password.trim()}
+            >
               💾 Save
             </SaveCredentialsButton>
           </FormButtons>
@@ -77,7 +129,9 @@ const Login: FC = () => {
       {isCredentialsSaved && (
         <SavedCredentialsInfo>
           <SavedText>Saved: {username}</SavedText>
-          <ClearCredentialsButton onClick={handleClearCredentials}>🗑️ Clear</ClearCredentialsButton>
+          <ClearCredentialsButton onClick={handleClearCredentials}>
+            🗑️ Clear
+          </ClearCredentialsButton>
         </SavedCredentialsInfo>
       )}
     </CredentialsSection>

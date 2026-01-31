@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
@@ -8,20 +8,45 @@ import Login from "./login";
 
 const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const gymCookie = Cookies.get("userGym");
   const savedGym = gymCookie ? JSON.parse(decodeURIComponent(gymCookie)) : null;
 
-  const click = (gym: { name: string; id: string }) => {
-    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })), { expires: 365 * 20 });
-    window.location.reload();
-  };
+  // Debounce the search term to prevent excessive filtering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
 
-  // Filter gyms based on search term
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const click = useCallback((gym: { name: string; id: string }) => {
+    Cookies.set(
+      "userGym",
+      encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })),
+      { expires: 365 * 20 },
+    );
+    window.location.reload();
+  }, []);
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value);
+    },
+    [],
+  );
+
+  // Filter gyms based on debounced search term
   const filteredGyms = useMemo(() => {
-    if (!searchTerm) return gymIds;
-    return gymIds.filter((gym) => gym.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [gymIds, searchTerm]);
+    if (!gymIds) return null;
+    if (!debouncedSearchTerm) return gymIds;
+
+    return gymIds.filter((gym) =>
+      gym.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
+    );
+  }, [gymIds, debouncedSearchTerm]);
 
   return (
     <>
@@ -39,17 +64,28 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
           <Login />
 
           <SearchContainer>
-            <SearchInput type="text" placeholder="🔍 Search gyms..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <SearchInput
+              type="text"
+              placeholder="🔍 Search gyms..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
           </SearchContainer>
 
           <Links>
-            {filteredGyms.map((gym) => {
-              return (
-                <LinkItem key={gym.id}>
-                  <GymName onClick={() => click(gym)}>{gym.name}</GymName>
-                </LinkItem>
-              );
-            })}
+            {filteredGyms ? (
+              filteredGyms.map((gym) => {
+                return (
+                  <LinkItem key={gym.id}>
+                    <GymName onClick={() => click(gym)}>{gym.name}</GymName>
+                  </LinkItem>
+                );
+              })
+            ) : (
+              <ErrorMessage>
+                Wow, how did you manage to break this, thats impressive
+              </ErrorMessage>
+            )}
           </Links>
         </Container>
       ) : null}
@@ -61,8 +97,18 @@ export default HamburgerMenu;
 
 type Props = {
   isHamburgerMenuOpen: boolean;
-  gymIds: AvailableGyms;
+  gymIds: AvailableGyms | null;
 };
+const ErrorMessage = styled.div`
+  color: #ef4444;
+  font-size: 1rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  margin: 1rem 0;
+`;
 
 const slide = keyframes`
   from {
