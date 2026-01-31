@@ -87,7 +87,6 @@ const pulse = keyframes`
 `;
 
 const Container = styled.div`
-  border: 1px solid red;
   min-height: 100vh;
   /* width: 100%; */
   padding: 2rem;
