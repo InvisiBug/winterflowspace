@@ -10,7 +10,7 @@ const StudioFree: FC = () => {
   const [availableGyms, setAvailableGyms] = useState(null);
   const [usersGym, setUsersGym] = useState(null);
   const [schedule, setSchedule] = useState(null);
-  const [totalOccupants, setTotalOccupants] = useState(null);
+  const [totalOccupants, setTotalOccupants] = useState(undefined);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +37,9 @@ const StudioFree: FC = () => {
         setSchedule(classSchedule);
 
         if (accessTokenCookie) {
-          const token = accessTokenCookie ? JSON.parse(decodeURIComponent(accessTokenCookie)).token : null;
+          const token = accessTokenCookie ? JSON.parse(decodeURIComponent(accessTokenCookie)).token : undefined;
 
-          setTotalOccupants((await getTotalUsers(token, selectedGym.id)) || 0);
+          setTotalOccupants(await getTotalUsers(token, selectedGym.id));
         }
       }
 
@@ -112,7 +112,7 @@ const StudioFree: FC = () => {
   }
   return (
     <Layout>
-      <Switcher data={schedule} availableGyms={availableGyms} peopleInGym={totalOccupants || 0} />
+      <Switcher data={schedule} availableGyms={availableGyms} peopleInGym={totalOccupants} />
     </Layout>
   );
 };
