@@ -71,7 +71,6 @@ export const login = async (username: string, password: string) => {
     });
 
     const { token } = await response.json();
-    console.log("🚀 ~ login ~ token:", token);
 
     return token;
   } catch {
