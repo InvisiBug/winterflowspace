@@ -1,6 +1,6 @@
 import StyledComponentsRegistry from "./registry";
 // import "./globals.css";
-// import { GlobalStyles } from "@/lib/ui";
+import { GlobalStyles } from "@/lib/ui";
 
 // TODO (Fix): Fix fonts [🌀-1]
 
@@ -11,12 +11,8 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <html lang="en" >
-        {/* <GlobalStyles /> */}
-        <body>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        </body>
-      </html>
+      <GlobalStyles />
+      <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
     </>
   );
 }

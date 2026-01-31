@@ -3,7 +3,10 @@ import { Schedule } from "@/lib/types/schedule";
 
 const API_BASE_URL = "http://localhost:3000";
 
-export const getSchedule = async (selectedGym: { name: string; id: string }) => {
+export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
+  console.log(selectedGym);
+  if (!selectedGym) return null;
+
   const response = await fetch(`${API_BASE_URL}/get-schedule`, {
     method: "POST",
     headers: {

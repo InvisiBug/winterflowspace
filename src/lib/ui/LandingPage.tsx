@@ -5,9 +5,23 @@ import { AvailableGyms } from "@/lib/types/gyms";
 import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
 
 const tiles = [
-  { icon: "🏃‍♂️", title: "Real-Time Tracking", description: "Live studio availability updates showing exactly when studios are free" },
-  { icon: "📍", title: "Any Pure Gym", description: "Choose from hundreds of Pure Gym locations across the UK" },
-  { icon: "⏰", title: "Smart Scheduling", description: "Plan your workouts around studio class schedules and free periods" },
+  {
+    icon: "🏃‍♂️",
+    title: "Real-Time Tracking",
+    description:
+      "Live studio availability updates showing exactly when studios are free",
+  },
+  {
+    icon: "📍",
+    title: "Any Pure Gym",
+    description: "Choose from hundreds of Pure Gym locations across the UK",
+  },
+  {
+    icon: "⏰",
+    title: "Smart Scheduling",
+    description:
+      "Plan your workouts around studio class schedules and free periods",
+  },
 ];
 
 const LandingPage: FC<Props> = ({ availableGyms }) => {
@@ -22,8 +36,14 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
     <>
       {isClient && (
         <>
-          <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
-          <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
+          <HamburgerButton
+            setIsHamburgerMenuOpen={setIsHamburgerMenuOpen}
+            isHamburgerMenuOpen={isHamburgerMenuOpen}
+          />
+          <HamburgerMenu
+            isHamburgerMenuOpen={isHamburgerMenuOpen}
+            gymIds={availableGyms}
+          />
         </>
       )}
 
@@ -32,7 +52,11 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
           <MainTitle>Winter Flow Space</MainTitle>
           <Subtitle>Pure Gym Studio Availability Tracker</Subtitle>
           <Subtitle>Open the menu to select your gym</Subtitle>
-          <Description>Discover when your favorite Pure Gym studio is free. Track real-time availability and plan your workouts around studio schedules at any Pure Gym location.</Description>
+          <Description>
+            Discover when your favorite Pure Gym studio is free. Track real-time
+            availability and plan your workouts around studio schedules at any
+            Pure Gym location.
+          </Description>
 
           <FeatureGrid>
             {tiles.map((tile) => (
@@ -46,7 +70,10 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
 
           <GetStartedSection>
             <GetStartedTitle>Ready to start?</GetStartedTitle>
-            <GetStartedDescription>Use the menu in the top-left corner to select your Pure Gym and start tracking studio availability.</GetStartedDescription>
+            <GetStartedDescription>
+              Use the menu in the top-left corner to select your Pure Gym and
+              start tracking studio availability.
+            </GetStartedDescription>
             <MenuIndicator $isClient={isClient}>☰</MenuIndicator>
           </GetStartedSection>
         </Hero>
@@ -58,7 +85,7 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
 export default LandingPage;
 
 interface Props {
-  availableGyms: AvailableGyms;
+  availableGyms: AvailableGyms | null;
 }
 
 const fadeIn = keyframes`
@@ -82,8 +109,9 @@ const pulse = keyframes`
 `;
 
 const Container = styled.div`
+  border: 1px solid red;
   min-height: 100vh;
-  width: 100%;
+  /* width: 100%; */
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -166,7 +194,11 @@ const FeatureGrid = styled.div`
 `;
 
 const FeatureCard = styled.div`
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.9) 0%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
@@ -209,7 +241,11 @@ const FeatureDescription = styled.p`
 `;
 
 const GetStartedSection = styled.div`
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(30, 41, 59, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(74, 222, 128, 0.1) 0%,
+    rgba(30, 41, 59, 0.9) 100%
+  );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(74, 222, 128, 0.3);
   border-radius: 20px;
