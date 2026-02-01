@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY . .
 
-ENV VITE_API=https://api.winterflowspace.com/
+ENV VITE_API=https://api.winterflowspace.com
 
 RUN npm install
 RUN npm run build
