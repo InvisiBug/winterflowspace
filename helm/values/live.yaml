@@ -1,0 +1,26 @@
+name: winterflowspace
+
+namespace: flowception
+env:
+  APP_VERSION: 367da6b40e72340174bf7df6f6d71e181584fc27
+
+deployment:
+  - name: winterflowspace
+    image: invisibug/winterflowspace
+    ports:
+      - port: 80
+    # env:
+    # Handled in Dockerfile.live
+
+ingress:
+  - name: winterflowspace.com
+    selector: winterflowspace
+    path: /.*
+    port: 80
+    host: winterflowspace.com
+
+service:
+  loadBalancer:
+    - name: winterflowspace
+      selector: winterflowspace
+      port: 80

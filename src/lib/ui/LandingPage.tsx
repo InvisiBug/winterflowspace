@@ -1,34 +1,39 @@
 "use client";
-import React, { FC, useState, useEffect } from "react";
-import styled, { keyframes, css } from "styled-components";
+import { FC, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { AvailableGyms } from "@/lib/types/gyms";
 import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
 
 const tiles = [
-  { icon: "🏃‍♂️", title: "Real-Time Tracking", description: "Live studio availability updates showing exactly when studios are free" },
-  { icon: "📍", title: "Any Pure Gym", description: "Choose from hundreds of Pure Gym locations across the UK" },
-  { icon: "⏰", title: "Smart Scheduling", description: "Plan your workouts around studio class schedules and free periods" },
+  {
+    icon: "🏃‍♂️",
+    title: "Real-Time Tracking",
+    description: "Live studio availability updates showing exactly when studios are free",
+  },
+  {
+    icon: "📍",
+    title: "Any Pure Gym",
+    description: "Choose from hundreds of Pure Gym locations across the UK",
+  },
+  {
+    icon: "⏰",
+    title: "Smart Scheduling",
+    description: "Plan your workouts around studio class schedules and free periods",
+  },
 ];
 
 const LandingPage: FC<Props> = ({ availableGyms }) => {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false); // Fixes hydration error by holding off rendering until on client
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <>
-      {isClient && (
-        <>
-          <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
-          <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
-        </>
-      )}
+      <>
+        <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
+        <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
+      </>
 
       <Container>
-        <Hero $isClient={isClient}>
+        <Hero>
           <MainTitle>Winter Flow Space</MainTitle>
           <Subtitle>Pure Gym Studio Availability Tracker</Subtitle>
           <Subtitle>Open the menu to select your gym</Subtitle>
@@ -47,7 +52,7 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
           <GetStartedSection>
             <GetStartedTitle>Ready to start?</GetStartedTitle>
             <GetStartedDescription>Use the menu in the top-left corner to select your Pure Gym and start tracking studio availability.</GetStartedDescription>
-            <MenuIndicator $isClient={isClient}>☰</MenuIndicator>
+            <MenuIndicator>☰</MenuIndicator>
           </GetStartedSection>
         </Hero>
       </Container>
@@ -58,7 +63,7 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
 export default LandingPage;
 
 interface Props {
-  availableGyms: AvailableGyms;
+  availableGyms: AvailableGyms | null;
 }
 
 const fadeIn = keyframes`
@@ -83,7 +88,7 @@ const pulse = keyframes`
 
 const Container = styled.div`
   min-height: 100vh;
-  width: 100%;
+  /* width: 100%; */
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -98,11 +103,8 @@ const Hero = styled.div<{ $isClient?: boolean }>`
   max-width: 800px;
   width: 100%;
   text-align: center;
-  ${({ $isClient }) =>
-    $isClient &&
-    css`
-      animation: ${fadeIn} 0.8s ease-out;
-    `}
+
+  animation: ${fadeIn} 0.8s ease-out;
 `;
 
 const MainTitle = styled.h1`
@@ -239,11 +241,8 @@ const MenuIndicator = styled.div<{ $isClient?: boolean }>`
   display: inline-block;
   font-size: 2rem;
   color: #4ade80;
-  ${({ $isClient }) =>
-    $isClient &&
-    css`
-      animation: ${pulse} 2s ease-in-out infinite;
-    `}
+
+  animation: ${pulse} 2s ease-in-out infinite;
 
   filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
 `;

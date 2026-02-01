@@ -1,74 +1,78 @@
 import { AvailableGyms, GymData } from "@/lib/types/gyms";
 import { Schedule } from "@/lib/types/schedule";
+const env = import.meta.env;
 
-export const getSchedule = async (selectedGym: { name: string; id: string }) => {
-  const rawGymSchedule = await fetch(`https://businessgateway.puregym.com/api/bookings/v1/timetable/${selectedGym.id}/scheduled-class`, { cache: "no-store" });
-  const gymSchedule: Schedule = await rawGymSchedule.json();
+// const API_BASE_URL = "http://Dlocalhost:3000";
+const API_BASE_URL = env.VITE_API ?? "";
 
-  return gymSchedule;
+export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
+  if (!selectedGym) return null;
+
+  const response = await fetch(`${API_BASE_URL}/get-schedule`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      gymId: selectedGym.id,
+    }),
+    cache: "no-store",
+  });
+
+  const { schedule } = await response.json();
+
+  return schedule;
 };
 
 export const getAllGyms = async () => {
-  //* Get and format the list of available gyms
-  const rawAvailableGymsResponse = await fetch("https://www.puregym.com/gymsandcities/page-data/sq/d/273207268.json", { cache: "no-store" });
-  const formattedAvailableGymResponse: GymData = await rawAvailableGymsResponse.json();
+  const response = await fetch(`${API_BASE_URL}/get-gyms`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
 
-  const availableGyms: AvailableGyms = [];
-
-  //* Format the available gyms data
-  formattedAvailableGymResponse.data.allGym.nodes?.forEach((gym) => {
-    availableGyms.push({ name: gym.name, id: gym.gymId });
-    availableGyms.sort((a, b) => a.name.localeCompare(b.name));
+    cache: "no-store",
   });
 
-  return availableGyms;
+  const { gyms } = await response.json();
+
+  return gyms;
 };
 
 export const getTotalUsers = async (token: string, gymId: string) => {
-  const headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
-    "User-Agent": "PureGym/1523 CFNetwork/1312 Darwin/21.0.0",
-  };
-
-  headers["Authorization"] = `Bearer ${token}`;
-
-  const gymData = await fetch(`https://capi.puregym.com/api/v2/gymSessions/gym?gymId=${gymId}`, {
+  const response = await fetch(`${API_BASE_URL}/get-occupants`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token,
+      gymId,
+    }),
     cache: "no-store",
-    headers,
   });
 
-  const parsedGymData = await gymData.json();
+  const { occupants } = await response.json();
 
-  const result = parsedGymData.TotalPeopleInGym;
-
-  return result;
+  return occupants;
 };
 
 export const login = async (username: string, password: string) => {
-  const data = {
-    grant_type: "password",
-    username,
-    password,
-    scope: "pgcapi",
-    client_id: "ro.client",
-  };
-
-  const headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
-    "User-Agent": "PureGym/1523 CFNetwork/1312 Darwin/21.0.0",
-    Authorization: "",
-  };
-
   try {
-    const loginToken = await fetch("https://auth.puregym.com/connect/token", {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
       cache: "no-store",
-      headers,
-      body: new URLSearchParams(data).toString(),
     });
-    const jsonResponse = await loginToken.json();
 
-    return jsonResponse.access_token;
+    const { token } = await response.json();
+
+    return token;
   } catch {
     return null;
   }

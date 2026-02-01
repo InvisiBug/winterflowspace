@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { mq, px } from "src/lib/mediaQueries";
+import { mq, px } from "@/lib/mediaQueries";
 
 const HamburgerButton: FC<Props> = ({ setIsHamburgerMenuOpen, isHamburgerMenuOpen }) => {
   const clickHandler = () => {

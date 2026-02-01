@@ -9,7 +9,6 @@ env:
   DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_KEY: ${{ secrets.DOCKERHUB_PASSWORD }}
   IMAGE_NAME: winterflowspace-test
-  DOCKER_DEFAULT_PLATFORM: linux/amd64
 
 jobs:
   build-and-push:
@@ -28,12 +27,17 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/arm64
 
-      - name: Build Docker image
-        run: docker build -f ./Dockerfile.kube -t ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-
-      - name: Push Docker image
-        run: docker push ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          file: ./Dockerfile.argo.test
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   update-app-version:
     needs: build-and-push
@@ -44,7 +48,7 @@ jobs:
 
       - name: Update values.yaml
         run: |
-          cd kube
+          cd helm
           sed -i 's|APP_VERSION:.*|APP_VERSION: '${{ github.sha }}'|' ./values/test.yaml
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'

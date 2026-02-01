@@ -2,7 +2,7 @@
 
 import { createGlobalStyle } from "styled-components";
 
-import { Roboto } from "next/font/google"; // Example using Roboto font
+
 
 // TODO (Fix): Figure out why fonts aren't working [🌀-1]
 // TODO (Investigation): Why doesn't border box work here? [🌀-2]
