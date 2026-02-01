@@ -4,7 +4,6 @@ const env = import.meta.env;
 
 // const API_BASE_URL = "http://Dlocalhost:3000";
 const API_BASE_URL = env.VITE_API ?? "";
-// change something
 
 export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
   if (!selectedGym) return null;
