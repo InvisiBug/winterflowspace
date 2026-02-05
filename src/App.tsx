@@ -1,16 +1,17 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import LandingPage from "@/lib/ui/LandingPage";
-import { getAllGyms, getTotalUsers } from "@/lib/api";
+import { getAllGyms, getOccupants } from "@/lib/api";
 import Layout from "@/lib/layout";
 import Switcher from "@/lib/ui/switcher";
-import { getSchedule } from "@/lib/api";
+import { getBookings } from "@/lib/api";
+import { Bookings, AvailableGyms } from "./lib/types";
 
 const StudioFree: FC = () => {
-  const [availableGyms, setAvailableGyms] = useState(null);
+  const [availableGyms, setAvailableGyms] = useState<AvailableGyms | null>(null);
   const [usersGym, setUsersGym] = useState(null);
-  const [schedule, setSchedule] = useState(null);
-  const [totalOccupants, setTotalOccupants] = useState(undefined);
+  const [totalOccupants, setTotalOccupants] = useState<number | undefined>(undefined);
+  const [bookings, setBookings] = useState<Bookings>([] as Bookings);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,14 +33,14 @@ const StudioFree: FC = () => {
         const selectedGym = usersGymCookie ? JSON.parse(decodeURIComponent(usersGymCookie)) : null;
         setUsersGym(selectedGym);
 
-        //? Get the schedule for the user's gym
-        const classSchedule = await getSchedule(selectedGym); //* raw at this point
-        setSchedule(classSchedule);
+        //? Get the studio bookings for the user's gym
+        const { bookings } = await getBookings(selectedGym);
+        setBookings(bookings);
 
         if (accessTokenCookie) {
           const token = accessTokenCookie ? JSON.parse(decodeURIComponent(accessTokenCookie)).token : undefined;
 
-          setTotalOccupants(await getTotalUsers(token, selectedGym.id));
+          setTotalOccupants(await getOccupants(token, selectedGym.id));
         }
       }
 
@@ -112,7 +113,7 @@ const StudioFree: FC = () => {
   }
   return (
     <Layout>
-      <Switcher data={schedule} availableGyms={availableGyms} peopleInGym={totalOccupants} />
+      <Switcher availableGyms={availableGyms} peopleInGym={totalOccupants} bookings={bookings} />
     </Layout>
   );
 };

@@ -1,21 +1,16 @@
-import React, { FC } from "react";
+import { FC } from "react";
+import Cookies from "js-cookie";
 import styled from "styled-components";
 import Indicator from "./indicator";
-import { Schedule } from "@/lib/types/schedule";
-import { parseSchedule } from "@/lib/utils";
-import { getOpenClosedRanges } from "./utils";
-import Cookies from "js-cookie";
+import { fillFreeSlots } from "./utils";
+import { Bookings } from "@/lib/types";
 
-const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
-  // TODO (Improvement): Offload this to the server
-  const todaysSchedule = parseSchedule(data.activities)[0];
-  const tomorrowsSchedule = parseSchedule(data.activities)[1];
-
-  const todayTimes = getOpenClosedRanges(todaysSchedule);
-  const tomorrowTimes = getOpenClosedRanges(tomorrowsSchedule);
-
+const MobileViewV2: FC<Props> = ({ bookings, peopleInGym }) => {
   const val = Cookies.get("userGym");
   const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
+
+  const today = fillFreeSlots(bookings[0]);
+  const tomorrow = fillFreeSlots(bookings[1]);
 
   return (
     <Container>
@@ -30,7 +25,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
         )}
       </Title>
 
-      {todayTimes.map((times) => {
+      {today.map((times) => {
         return <Indicator free={times.free} start={times.start} end={times.end} timeline={true} key={`${times.start}-${times.end}`} />;
       })}
 
@@ -39,8 +34,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
         <SpacerText>Tomorrow</SpacerText>
         <SpacerLine />
       </DaySpacer>
-
-      {tomorrowTimes.map((times) => {
+      {tomorrow.map((times) => {
         return <Indicator free={times.free} start={times.start} end={times.end} timeline={false} key={`tomorrow-${times.start}-${times.end}`} />;
       })}
     </Container>
@@ -48,7 +42,7 @@ const MobileViewV2: FC<Props> = ({ data, peopleInGym }) => {
 };
 
 type Props = {
-  data: Schedule;
+  bookings: Bookings;
   peopleInGym?: number;
 };
 

@@ -1,14 +1,13 @@
-import { AvailableGyms, GymData } from "@/lib/types/gyms";
-import { Schedule } from "@/lib/types/schedule";
+import { AvailableGyms, GymData, Bookings } from "@/lib/types";
 const env = import.meta.env;
 
 // const API_BASE_URL = "http://Dlocalhost:3000";
 const API_BASE_URL = env.VITE_API ?? "";
 
-export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
+export const getBookings = async (selectedGym: { name: string; id: string } | null): Promise<Bookings | null> => {
   if (!selectedGym) return null;
 
-  const response = await fetch(`${API_BASE_URL}/get-schedule`, {
+  const response = await fetch(`${API_BASE_URL}/get-bookings`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,12 +18,13 @@ export const getSchedule = async (selectedGym: { name: string; id: string } | nu
     cache: "no-store",
   });
 
-  const { schedule } = await response.json();
+  const bookings = await response.json();
+  console.log("🚀 ~ getBookings ~ bookings:", bookings);
 
-  return schedule;
+  return bookings;
 };
 
-export const getAllGyms = async () => {
+export const getAllGyms = async (): Promise<AvailableGyms | null> => {
   const response = await fetch(`${API_BASE_URL}/get-gyms`, {
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export const getAllGyms = async () => {
   return gyms;
 };
 
-export const getTotalUsers = async (token: string, gymId: string) => {
+export const getOccupants = async (token: string, gymId: string) => {
   const response = await fetch(`${API_BASE_URL}/get-occupants`, {
     method: "POST",
     headers: {

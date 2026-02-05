@@ -20,34 +20,6 @@ export const getCurrentTimePercentage = (start: string, end: string): number => 
   return (elapsed / total) * 100;
 };
 
-export const getOpenClosedRanges = (scheduleArr: any[]) => {
-  const result: { free: boolean; start: string; end: string }[] = [];
-  let currentStatus = scheduleArr[0];
-  let startIdx = 0;
-
-  // Helper to convert index to time string (e.g., "00:00", "01:15")
-  const indexToTime = (idx: number) => {
-    const hour = Math.floor(idx / 4)
-      .toString()
-      .padStart(2, "0");
-    const minute = ((idx % 4) * 15).toString().padStart(2, "0");
-    return `${hour}:${minute}`;
-  };
-
-  for (let i = 1; i <= scheduleArr.length; i++) {
-    if (scheduleArr[i] !== currentStatus) {
-      result.push({
-        free: !currentStatus,
-        start: indexToTime(startIdx),
-        end: indexToTime(i),
-      });
-      startIdx = i;
-      currentStatus = scheduleArr[i];
-    }
-  }
-  return result;
-};
-
 export const formatTo12Hour = (time: string) => {
   const [hourStr, minuteStr] = time.split(":");
   let hour = parseInt(hourStr, 10);
@@ -55,4 +27,71 @@ export const formatTo12Hour = (time: string) => {
   const ampm = hour >= 12 ? "PM" : "AM";
   hour = hour % 12 || 12;
   return `${hour}:${minute} ${ampm}`;
+};
+interface Booking {
+  free: boolean;
+  start: string; // HH:MM format
+  end: string; // HH:MM format
+}
+
+export const fillFreeSlots = (bookings: Booking[]): Booking[] => {
+  // Sort bookings by start time
+  const sortedBookings = [...bookings].sort((a, b) => a.start.localeCompare(b.start));
+  const completeSchedule: Booking[] = [];
+  let currentTime = "00:00";
+
+  for (let i = 0; i < sortedBookings.length; i++) {
+    const booking = sortedBookings[i];
+
+    // Add free slot before this booking if there's a gap
+    if (currentTime < booking.start) {
+      completeSchedule.push({
+        free: true,
+        start: currentTime,
+        end: booking.start,
+      });
+    }
+
+    // Check if this is a non-free booking that should be merged with consecutive ones
+    if (!booking.free) {
+      const mergedStart = booking.start;
+      let mergedEnd = booking.end;
+      const mergedBooking = { ...booking };
+
+      // Look ahead to merge consecutive non-free bookings
+      let j = i + 1;
+      while (j < sortedBookings.length && !sortedBookings[j].free && sortedBookings[j].start === mergedEnd) {
+        mergedEnd = sortedBookings[j].end;
+        j++;
+      }
+
+      // Add the merged booking
+      completeSchedule.push({
+        ...mergedBooking,
+        start: mergedStart,
+        end: mergedEnd,
+      });
+
+      // Skip the bookings we've merged
+      i = j - 1;
+      currentTime = mergedEnd;
+    } else {
+      // Add individual free booking as-is
+      completeSchedule.push(booking);
+      currentTime = booking.end;
+    }
+  }
+
+  // Add final free slot if day doesn't end with a booking
+  if (currentTime < "24:00") {
+    completeSchedule.push({
+      start: currentTime,
+      end: "24:00",
+      free: true,
+    });
+  }
+
+  console.log(completeSchedule);
+
+  return completeSchedule;
 };
