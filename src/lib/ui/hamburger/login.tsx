@@ -1,28 +1,28 @@
 "use client";
-import { FC, useState, useEffect, useCallback } from "react";
+import { FC, useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { login } from "@/lib/api";
 
 const Login: FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isCredentialsSaved, setIsCredentialsSaved] = useState(false);
-  const [showCredentialsForm, setShowCredentialsForm] = useState(false);
-
-  // Check for saved credentials on component mount
-  useEffect(() => {
+  const [username, setUsername] = useState(() => {
     const accessToken = Cookies.get("accessToken") || "";
     const userName = Cookies.get("username") || "";
 
-    if (accessToken) {
-      const username = JSON.parse(decodeURIComponent(userName));
-
-      setUsername(username);
-      setIsCredentialsSaved(true);
+    if (accessToken && userName) {
+      return JSON.parse(decodeURIComponent(userName));
     }
-  }, []);
+    return "";
+  });
+
+  const [isCredentialsSaved, setIsCredentialsSaved] = useState(() => {
+    const accessToken = Cookies.get("accessToken") || "";
+    return !!accessToken;
+  });
+
+  const [password, setPassword] = useState("");
+  const [showCredentialsForm, setShowCredentialsForm] = useState(false);
 
   const handleSaveCredentials = useCallback(async () => {
     if (username.trim() && password.trim()) {

@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { mq, px } from "@/lib/mediaQueries";
 
 const HamburgerButton: FC<Props> = ({ setIsHamburgerMenuOpen, isHamburgerMenuOpen }) => {
   const clickHandler = () => {
@@ -25,8 +24,6 @@ type Props = {
   setIsHamburgerMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isHamburgerMenuOpen: boolean;
 };
-
-const borders = false;
 
 const pulse = keyframes`
   0% { transform: scale(1); }

@@ -1,37 +1,10 @@
-"use client";
-import { FC, useState } from "react";
+import { FC } from "react";
 import styled, { keyframes } from "styled-components";
-import { AvailableGyms } from "@/lib/types/gyms";
-import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
+import { tiles } from "./tiles";
 
-const tiles = [
-  {
-    icon: "🏃‍♂️",
-    title: "Real-Time Tracking",
-    description: "Live studio availability updates showing exactly when studios are free",
-  },
-  {
-    icon: "📍",
-    title: "Any Pure Gym",
-    description: "Choose from hundreds of Pure Gym locations across the UK",
-  },
-  {
-    icon: "⏰",
-    title: "Smart Scheduling",
-    description: "Plan your workouts around studio class schedules and free periods",
-  },
-];
-
-const LandingPage: FC<Props> = ({ availableGyms }) => {
-  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-
+const LandingPage: FC = () => {
   return (
     <>
-      <>
-        <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
-        <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
-      </>
-
       <Container>
         <Hero>
           <MainTitle>Winter Flow Space</MainTitle>
@@ -61,10 +34,6 @@ const LandingPage: FC<Props> = ({ availableGyms }) => {
 };
 
 export default LandingPage;
-
-interface Props {
-  availableGyms: AvailableGyms | null;
-}
 
 const fadeIn = keyframes`
   from {

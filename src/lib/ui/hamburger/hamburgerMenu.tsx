@@ -1,9 +1,8 @@
-"use client";
 import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { AvailableGyms } from "@/lib/types/gyms";
+import { AvailableGyms } from "@/lib/types";
 import Login from "./login";
 
 const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
@@ -23,29 +22,20 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
   }, [searchTerm]);
 
   const click = useCallback((gym: { name: string; id: string }) => {
-    Cookies.set(
-      "userGym",
-      encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })),
-      { expires: 365 * 20 },
-    );
+    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })), { expires: 365 * 20 });
     window.location.reload();
   }, []);
 
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(e.target.value);
-    },
-    [],
-  );
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
 
   // Filter gyms based on debounced search term
   const filteredGyms = useMemo(() => {
     if (!gymIds) return null;
     if (!debouncedSearchTerm) return gymIds;
 
-    return gymIds.filter((gym) =>
-      gym.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
-    );
+    return gymIds.filter((gym) => gym.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
   }, [gymIds, debouncedSearchTerm]);
 
   return (
@@ -64,12 +54,7 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
           <Login />
 
           <SearchContainer>
-            <SearchInput
-              type="text"
-              placeholder="🔍 Search gyms..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+            <SearchInput type="text" placeholder="🔍 Search gyms..." value={searchTerm} onChange={handleSearchChange} />
           </SearchContainer>
 
           <Links>
@@ -82,9 +67,7 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
                 );
               })
             ) : (
-              <ErrorMessage>
-                Wow, how did you manage to break this, thats impressive
-              </ErrorMessage>
+              <ErrorMessage>Wow, how did you manage to break this, thats impressive</ErrorMessage>
             )}
           </Links>
         </Container>

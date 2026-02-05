@@ -1,7 +1,6 @@
-import { AvailableGyms, GymData, Bookings } from "@/lib/types";
-const env = import.meta.env;
+import { AvailableGyms, Bookings } from "@/lib/types";
 
-// const API_BASE_URL = "http://Dlocalhost:3000";
+const env = import.meta.env;
 const API_BASE_URL = env.VITE_API ?? "";
 
 export const getBookings = async (selectedGym: { name: string; id: string } | null): Promise<Bookings | null> => {
@@ -18,8 +17,8 @@ export const getBookings = async (selectedGym: { name: string; id: string } | nu
     cache: "no-store",
   });
 
-  const bookings = await response.json();
-  console.log("🚀 ~ getBookings ~ bookings:", bookings);
+  // Stupid status comes back from the api call, deferencing the bookings so that its dropped
+  const { bookings }: { status: string; bookings: Bookings } = await response.json();
 
   return bookings;
 };
@@ -51,7 +50,7 @@ export const getOccupants = async (token: string, gymId: string) => {
     cache: "no-store",
   });
 
-  const { occupants } = await response.json();
+  const { occupants }: { status: string; occupants: number } = await response.json();
 
   return occupants;
 };
@@ -70,7 +69,7 @@ export const login = async (username: string, password: string) => {
       cache: "no-store",
     });
 
-    const { token } = await response.json();
+    const { token }: { status: string; token: string } = await response.json();
 
     return token;
   } catch {

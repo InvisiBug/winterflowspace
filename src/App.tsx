@@ -1,17 +1,16 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
-import LandingPage from "@/lib/ui/LandingPage";
-import { getAllGyms, getOccupants } from "@/lib/api";
-import Layout from "@/lib/layout";
-import Switcher from "@/lib/ui/switcher";
-import { getBookings } from "@/lib/api";
-import { Bookings, AvailableGyms } from "./lib/types";
+import { getAllGyms, getOccupants, getBookings } from "@/lib/api";
+import { Bookings, AvailableGyms } from "@/lib/types";
+import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
+import { Timetable, LandingPage } from "@/lib/ui/views";
 
 const StudioFree: FC = () => {
   const [availableGyms, setAvailableGyms] = useState<AvailableGyms | null>(null);
   const [usersGym, setUsersGym] = useState(null);
   const [totalOccupants, setTotalOccupants] = useState<number | undefined>(undefined);
-  const [bookings, setBookings] = useState<Bookings>([] as Bookings);
+  const [bookings, setBookings] = useState<Bookings | null>(null);
+  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +33,7 @@ const StudioFree: FC = () => {
         setUsersGym(selectedGym);
 
         //? Get the studio bookings for the user's gym
-        const { bookings } = await getBookings(selectedGym);
+        const bookings = await getBookings(selectedGym);
         setBookings(bookings);
 
         if (accessTokenCookie) {
@@ -59,62 +58,59 @@ const StudioFree: FC = () => {
 
   if (loading) {
     return (
-      <Layout>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            color: "white",
-          }}
-        >
-          Loading gyms...
-        </div>
-      </Layout>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+          color: "white",
+        }}
+      >
+        Loading gyms...
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Layout>
-        <div
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+          color: "white",
+        }}
+      >
+        <p>Error loading gyms. Please try again.</p>
+        <button
+          onClick={fetchGyms}
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
+            padding: "10px 20px",
+            marginTop: "10px",
+            background: "#3b82f6",
             color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
           }}
         >
-          <p>Error loading gyms. Please try again.</p>
-          <button
-            onClick={fetchGyms}
-            style={{
-              padding: "10px 20px",
-              marginTop: "10px",
-              background: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Retry
-          </button>
-        </div>
-      </Layout>
+          Retry
+        </button>
+      </div>
     );
   }
 
-  if (!usersGym) {
-    return <LandingPage availableGyms={availableGyms} />;
-  }
   return (
-    <Layout>
-      <Switcher availableGyms={availableGyms} peopleInGym={totalOccupants} bookings={bookings} />
-    </Layout>
+    <>
+      <HamburgerButton setIsHamburgerMenuOpen={setIsHamburgerMenuOpen} isHamburgerMenuOpen={isHamburgerMenuOpen} />
+      <HamburgerMenu isHamburgerMenuOpen={isHamburgerMenuOpen} gymIds={availableGyms} />
+
+      {bookings && <Timetable bookings={bookings} totalOccupants={totalOccupants} />}
+      {!usersGym && <LandingPage />}
+    </>
   );
 };
 

@@ -2,10 +2,10 @@ import { FC } from "react";
 import Cookies from "js-cookie";
 import styled from "styled-components";
 import Indicator from "./indicator";
-import { fillFreeSlots } from "./utils";
+import { fillFreeSlots } from "@/lib/utils";
 import { Bookings } from "@/lib/types";
 
-const MobileViewV2: FC<Props> = ({ bookings, peopleInGym }) => {
+const Timetable: FC<Props> = ({ bookings, totalOccupants }) => {
   const val = Cookies.get("userGym");
   const parsed = val ? JSON.parse(decodeURIComponent(val)) : null;
 
@@ -17,10 +17,10 @@ const MobileViewV2: FC<Props> = ({ bookings, peopleInGym }) => {
       <Title>
         <TitleText>Studio Availability</TitleText>
         {parsed?.name && <GymName>{parsed.name}</GymName>}
-        {peopleInGym !== undefined && (
+        {totalOccupants !== undefined && (
           <PeopleCount>
             <PeopleIcon>👥</PeopleIcon>
-            <PeopleText>{peopleInGym} people currently in the gym</PeopleText>
+            <PeopleText>{totalOccupants} people currently in the gym</PeopleText>
           </PeopleCount>
         )}
       </Title>
@@ -43,10 +43,10 @@ const MobileViewV2: FC<Props> = ({ bookings, peopleInGym }) => {
 
 type Props = {
   bookings: Bookings;
-  peopleInGym?: number;
+  totalOccupants?: number;
 };
 
-export default MobileViewV2;
+export default Timetable;
 
 const borders = false;
 

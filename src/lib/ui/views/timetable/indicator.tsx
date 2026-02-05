@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { getCurrentTimePercentage, formatTo12Hour } from "./utils";
-import { freeColour, busyColour } from "@/lib/colours";
+import { getCurrentTimePercentage, formatTo12Hour } from "../../../utils";
+import { freeColour, busyColour } from "@/lib/ui/colours";
 
 const Indicator: FC<Props> = ({ free, start, end, timeline }) => {
   const timePerc = getCurrentTimePercentage(start, end);
