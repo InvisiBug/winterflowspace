@@ -1,14 +1,12 @@
-import { AvailableGyms, GymData } from "@/lib/types/gyms";
-import { Schedule } from "@/lib/types/schedule";
-const env = import.meta.env;
+import { AvailableGyms, Bookings } from "@/lib/types";
 
-// const API_BASE_URL = "http://Dlocalhost:3000";
+const env = import.meta.env;
 const API_BASE_URL = env.VITE_API ?? "";
 
-export const getSchedule = async (selectedGym: { name: string; id: string } | null) => {
+export const getBookings = async (selectedGym: { name: string; id: string } | null): Promise<Bookings | null> => {
   if (!selectedGym) return null;
 
-  const response = await fetch(`${API_BASE_URL}/get-schedule`, {
+  const response = await fetch(`${API_BASE_URL}/get-bookings`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,12 +17,13 @@ export const getSchedule = async (selectedGym: { name: string; id: string } | nu
     cache: "no-store",
   });
 
-  const { schedule } = await response.json();
+  // Stupid status comes back from the api call, deferencing the bookings so that its dropped
+  const { bookings }: { status: string; bookings: Bookings } = await response.json();
 
-  return schedule;
+  return bookings;
 };
 
-export const getAllGyms = async () => {
+export const getAllGyms = async (): Promise<AvailableGyms | null> => {
   const response = await fetch(`${API_BASE_URL}/get-gyms`, {
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +37,7 @@ export const getAllGyms = async () => {
   return gyms;
 };
 
-export const getTotalUsers = async (token: string, gymId: string) => {
+export const getOccupants = async (token: string, gymId: string) => {
   const response = await fetch(`${API_BASE_URL}/get-occupants`, {
     method: "POST",
     headers: {
@@ -51,7 +50,7 @@ export const getTotalUsers = async (token: string, gymId: string) => {
     cache: "no-store",
   });
 
-  const { occupants } = await response.json();
+  const { occupants }: { status: string; occupants: number } = await response.json();
 
   return occupants;
 };
@@ -70,7 +69,7 @@ export const login = async (username: string, password: string) => {
       cache: "no-store",
     });
 
-    const { token } = await response.json();
+    const { token }: { status: string; token: string } = await response.json();
 
     return token;
   } catch {

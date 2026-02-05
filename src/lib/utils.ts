@@ -1,83 +1,95 @@
-import { ActivitiesEntity, ClassData } from "@/lib/types/schedule";
+export const getCurrentTimePercentage = (start: string, end: string): number => {
+  // Assumes start and end are in "HH:mm" format
+  const now = new Date();
+  const [startHour, startMinute] = start.split(":").map(Number);
+  const [endHour, endMinute] = end.split(":").map(Number);
 
-const debug = false;
+  const startTime = new Date(now);
+  startTime.setHours(startHour, startMinute, 0, 0);
 
-export const getCurrentHour = () => {
-  const date = new Date();
-  const hours = date.getHours();
-  return hours;
+  const endTime = new Date(now);
+  endTime.setHours(endHour, endMinute, 0, 0);
+
+  const total = endTime.getTime() - startTime.getTime();
+  const elapsed = now.getTime() - startTime.getTime();
+
+  if (total <= 0) return 0;
+  if (elapsed <= 0) return 0;
+  if (elapsed >= total) return 100;
+
+  return (elapsed / total) * 100;
 };
 
-export const parseSchedule = (data: ActivitiesEntity[]) => {
-  if (debug) console.log(data);
-  const numDays = 5;
-  const busySchedule: ClassData[][] = [];
+export const formatTo12Hour = (time: string) => {
+  const [hourStr, minuteStr] = time.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = minuteStr || "00";
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minute} ${ampm}`;
+};
+interface Booking {
+  free: boolean;
+  start: string; // HH:MM format
+  end: string; // HH:MM format
+}
 
-  //* Create an array of times the studio is in use over the next 3 days
-  Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
-    const todaysSchedule = new Array<ClassData>();
+export const fillFreeSlots = (bookings: Booking[]): Booking[] => {
+  // Sort bookings by start time
+  const sortedBookings = [...bookings].sort((a, b) => a.start.localeCompare(b.start));
+  const completeSchedule: Booking[] = [];
+  let currentTime = "00:00";
 
-    data.forEach((element: ActivitiesEntity) => {
-      if (element.studio.toUpperCase() === "STUDIO") {
-        const rawStartTime = element.startDateTime.dateTime.replace("T", " "); // They keep changing the date format so pulled it out here
-        const d = new Date();
+  for (let i = 0; i < sortedBookings.length; i++) {
+    const booking = sortedBookings[i];
 
-        const now = new Date(d.setDate(d.getDate() + dayIndex));
-        const date = new Date(Date.parse(rawStartTime));
+    // Add free slot before this booking if there's a gap
+    if (currentTime < booking.start) {
+      completeSchedule.push({
+        free: true,
+        start: currentTime,
+        end: booking.start,
+      });
+    }
 
-        if (debug) console.log(rawStartTime);
-        if (debug) console.log(now.setHours(0, 0, 0, 0), date.setHours(0, 0, 0, 0));
+    // Check if this is a non-free booking that should be merged with consecutive ones
+    if (!booking.free) {
+      const mergedStart = booking.start;
+      let mergedEnd = booking.end;
+      const mergedBooking = { ...booking };
 
-        // Get only the events for the day
-        if (now.setHours(0, 0, 0, 0) === date.setHours(0, 0, 0, 0)) {
-          if (debug) console.log("Here");
-          const startHours = String(new Date(rawStartTime).getHours()).padStart(2, "0");
-          const startMinutes = String(new Date(rawStartTime).getMinutes()).padStart(2, "0");
-
-          const endHours = String(new Date(Date.parse(rawStartTime) + element.duration * 60000).getHours()).padStart(2, "0");
-          const endMinutes = String(new Date(Date.parse(rawStartTime) + element.duration * 60000).getMinutes()).padStart(2, "0");
-
-          todaysSchedule.push({
-            start: `${startHours}:${startMinutes}`,
-            end: `${endHours}:${endMinutes}`,
-            duration: element.duration,
-          });
-        }
+      // Look ahead to merge consecutive non-free bookings
+      let j = i + 1;
+      while (j < sortedBookings.length && !sortedBookings[j].free && sortedBookings[j].start === mergedEnd) {
+        mergedEnd = sortedBookings[j].end;
+        j++;
       }
-    });
-    busySchedule.push(todaysSchedule);
-  });
 
-  const finalSchedule = new Array<number[]>();
+      // Add the merged booking
+      completeSchedule.push({
+        ...mergedBooking,
+        start: mergedStart,
+        end: mergedEnd,
+      });
 
-  if (debug) console.log("busy schedule", busySchedule);
-
-  Array.from({ length: numDays }).forEach((_, dayIndex: number) => {
-    finalSchedule.push(markTimeline(busySchedule[dayIndex]));
-  });
-
-  return finalSchedule;
-};
-
-/**
- *
- * @param studioInUseToday
- * @returns an array of 24 * 15 elements, each element represents a 15 minute time slot, 0 for free, 1 for busy
- * * note: There's a really annoying point where classes don't start or finish on the hour or on the half hour example, 7:35
- * * This cause problems with the mark timeline function, which is why the Math.floor is in place
- */
-export function markTimeline(studioInUseToday: ClassData[]): number[] {
-  // Initialize the timeline
-  const timeline = new Array<number>((24 * 60) / 15).fill(0);
-
-  // Mark the times in the timeline
-  for (const timeSlot of studioInUseToday) {
-    const start = Math.floor((parseInt(timeSlot.start.split(":")[0]) * 60 + parseInt(timeSlot.start.split(":")[1])) / 15);
-    const end = Math.floor((parseInt(timeSlot.end.split(":")[0]) * 60 + parseInt(timeSlot.end.split(":")[1])) / 15);
-
-    for (let i = start; i < end; i++) {
-      timeline[i] = 1;
+      // Skip the bookings we've merged
+      i = j - 1;
+      currentTime = mergedEnd;
+    } else {
+      // Add individual free booking as-is
+      completeSchedule.push(booking);
+      currentTime = booking.end;
     }
   }
-  return timeline;
-}
+
+  // Add final free slot if day doesn't end with a booking
+  if (currentTime < "24:00") {
+    completeSchedule.push({
+      start: currentTime,
+      end: "24:00",
+      free: true,
+    });
+  }
+
+  return completeSchedule;
+};
