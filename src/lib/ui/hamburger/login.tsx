@@ -1,4 +1,3 @@
-"use client";
 import { FC, useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
@@ -6,6 +5,11 @@ import { keyframes } from "@emotion/react";
 import { login } from "@/lib/api";
 
 const Login: FC = () => {
+  const [password, setPassword] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loginAttempted, setLoginAttempted] = useState(false);
+  const [showCredentialsForm, setShowCredentialsForm] = useState(false);
+
   const [username, setUsername] = useState(() => {
     const accessToken = Cookies.get("accessToken") || "";
     const userName = Cookies.get("username") || "";
@@ -21,17 +25,21 @@ const Login: FC = () => {
     return !!accessToken;
   });
 
-  const [password, setPassword] = useState("");
-  const [showCredentialsForm, setShowCredentialsForm] = useState(false);
-
   const handleSaveCredentials = useCallback(async () => {
+    setLoginAttempted(true);
     if (username.trim() && password.trim()) {
       try {
         const token = await login(username.trim(), password.trim());
 
+        if (token === undefined) {
+          setSuccess(false);
+          return;
+        }
+
         Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })));
         Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())));
 
+        setSuccess(true);
         setIsCredentialsSaved(true);
         setShowCredentialsForm(false);
 
@@ -52,6 +60,8 @@ const Login: FC = () => {
 
     setUsername("");
     setPassword("");
+    setSuccess(false);
+    setLoginAttempted(false);
     setIsCredentialsSaved(false);
     setShowCredentialsForm(false);
   }, []);
@@ -81,17 +91,16 @@ const Login: FC = () => {
             <FormLabel>Username/Email</FormLabel>
             <FormInput type="email" placeholder="your.email@example.com" value={username} onChange={handleUsernameChange} />
           </FormGroup>
-
           <FormGroup>
             <FormLabel>Password</FormLabel>
             <FormInput type="password" placeholder="Your Pin" value={password} onChange={handlePasswordChange} />
           </FormGroup>
-
           <FormButtons>
             <SaveCredentialsButton onClick={handleSaveCredentials} disabled={!username.trim() || !password.trim()}>
               💾 Save
             </SaveCredentialsButton>
           </FormButtons>
+          <FormLabel>{loginAttempted && !success ? <div>Error logging in. Please try again later.</div> : null}</FormLabel>
         </CredentialsForm>
       )}
 
