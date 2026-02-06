@@ -6,9 +6,29 @@ export interface Booking {
 
 export type Bookings = Booking[][];
 
-export type AvailableGyms = UserSelection[];
+export type AvailableGyms = UserGymSelection[];
 
-export type UserSelection = {
+export type UserGymSelection = {
   name: string;
   id: string;
 };
+
+export interface GetBookingResponse {
+  status: string;
+  bookings: Bookings;
+}
+
+export interface GetGymsResponse {
+  status: string;
+  gyms: AvailableGyms;
+}
+
+export interface GetOccupantsResponse {
+  status: string;
+  occupants: number;
+}
+
+export interface LoginResponse {
+  status: string;
+  token: string;
+}

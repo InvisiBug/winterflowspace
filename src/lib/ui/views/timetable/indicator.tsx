@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import styled, { keyframes, css } from "styled-components";
-import { getCurrentTimePercentage, formatTo12Hour } from "../../../utils";
+import { getCurrentTimePercentage, formatTo12Hour } from "@/lib/utils";
 import { freeColour, busyColour } from "@/lib/ui/colours";
+import { Booking } from "@/lib/types";
 
 const Indicator: FC<Props> = ({ free, start, end, timeline }) => {
   const timePerc = getCurrentTimePercentage(start, end);
@@ -19,12 +20,9 @@ const Indicator: FC<Props> = ({ free, start, end, timeline }) => {
 
 export default Indicator;
 
-type Props = {
-  free: boolean;
-  start: string;
-  end: string;
+interface Props extends Booking {
   timeline: boolean;
-};
+}
 
 const slideIn = keyframes`
   from {

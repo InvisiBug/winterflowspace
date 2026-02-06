@@ -2,7 +2,7 @@ import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
 import Cookies from "js-cookie";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { AvailableGyms } from "@/lib/types";
+import { AvailableGyms, UserGymSelection } from "@/lib/types";
 import Login from "./login";
 
 const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
@@ -21,9 +21,14 @@ const HamburgerMenu: FC<Props> = ({ isHamburgerMenuOpen, gymIds }) => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const click = useCallback((gym: { name: string; id: string }) => {
-    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name: gym.name, id: gym.id })), { expires: 365 * 20 });
-    window.location.reload();
+  const click = useCallback((gym: UserGymSelection) => {
+    const { name, id } = gym;
+    Cookies.set("userGym", encodeURIComponent(JSON.stringify({ name, id })), { expires: 365 * 20 });
+
+    // Small delay to ensure state is updated before reload
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   }, []);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

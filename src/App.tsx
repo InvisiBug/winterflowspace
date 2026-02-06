@@ -6,10 +6,10 @@ import { HamburgerButton, HamburgerMenu } from "@/lib/ui/hamburger";
 import { Timetable, LandingPage } from "@/lib/ui/views";
 
 const StudioFree: FC = () => {
-  const [availableGyms, setAvailableGyms] = useState<AvailableGyms | null>(null);
   const [usersGym, setUsersGym] = useState(null);
-  const [totalOccupants, setTotalOccupants] = useState<number | undefined>(undefined);
   const [bookings, setBookings] = useState<Bookings | null>(null);
+  const [availableGyms, setAvailableGyms] = useState<AvailableGyms | null>(null);
+  const [totalOccupants, setTotalOccupants] = useState<number | undefined>(undefined);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);

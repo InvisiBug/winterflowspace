@@ -1,4 +1,4 @@
-export const getCurrentTimePercentage = (start: string, end: string): number => {
+export const getCurrentTimePercentage = (start: string, end: string) => {
   // Assumes start and end are in "HH:mm" format
   const now = new Date();
   const [startHour, startMinute] = start.split(":").map(Number);
@@ -34,7 +34,7 @@ interface Booking {
   end: string; // HH:MM format
 }
 
-export const fillFreeSlots = (bookings: Booking[]): Booking[] => {
+export const fillFreeSlots = (bookings: Booking[]) => {
   // Sort bookings by start time
   const sortedBookings = [...bookings].sort((a, b) => a.start.localeCompare(b.start));
   const completeSchedule: Booking[] = [];

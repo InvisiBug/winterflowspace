@@ -83,8 +83,8 @@ const Title = styled.div`
 
 const TitleText = styled.h1`
   color: white;
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 500;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.025em;
 
@@ -98,8 +98,8 @@ const TitleText = styled.h1`
 
 const GymName = styled.h2`
   color: #4ade80;
-  font-size: 1.125rem;
-  font-weight: 500;
+  font-size: 1.75rem;
+  font-weight: 600;
   margin: 0;
   letter-spacing: 0.05em;
 
