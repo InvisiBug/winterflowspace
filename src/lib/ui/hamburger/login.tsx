@@ -36,8 +36,8 @@ const Login: FC = () => {
           return;
         }
 
-        Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })));
-        Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())));
+        Cookies.set("accessToken", encodeURIComponent(JSON.stringify({ token })), { expires: 30 });
+        Cookies.set("username", encodeURIComponent(JSON.stringify(username.trim())), { expires: 30 });
 
         setSuccess(true);
         setIsCredentialsSaved(true);
