@@ -34,12 +34,17 @@ const StudioFree: FC = () => {
 
         //? Get the studio bookings for the user's gym
         const bookings = await getBookings(selectedGym);
+
         setBookings(bookings);
 
         if (accessTokenCookie) {
+          setLoading(false);
           const token = accessTokenCookie ? JSON.parse(decodeURIComponent(accessTokenCookie)).token : undefined;
 
-          setTotalOccupants(await getOccupants(token, selectedGym.id));
+          const occupants = await getOccupants(token, selectedGym.id);
+          console.log("🚀 ~ StudioFree ~ occupants:", occupants);
+
+          setTotalOccupants(occupants);
         }
       }
 
