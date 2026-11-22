@@ -1,8 +1,8 @@
 name: winterflowspace
 
-namespace: flowception
+namespace: winterflowspace
 env:
-  APP_VERSION: 385077f37887a363b119b687ac8eb41e5ef9af1d
+  APP_VERSION: aa04d3cb87bb8f26304bf78397038c6dc04138e0
 
 deployment:
   - name: winterflowspace
