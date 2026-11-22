@@ -12,15 +12,30 @@ deployment:
     # env:
     # Handled in Dockerfile.live
 
-ingress:
-  - name: winterflowspace.com
-    selector: winterflowspace
-    path: /.*
-    port: 80
-    host: winterflowspace.com
-
 service:
-  loadBalancer:
-    - name: winterflowspace
-      selector: winterflowspace
-      port: 80
+  name: winterflowspace
+  selector: winterflowspace
+  port: 80
+  targetPort: 80
+
+httpRoute:
+  name: winterflowspace
+  gatewayName: kavanetes-gateway
+  gatewayNamespace: nginx-gateway
+  host: api.winterflowspace.com
+  path: /
+  serviceName: winterflowspace
+  servicePort: 80
+
+# ingress:
+#   - name: winterflowspace.com
+#     selector: winterflowspace
+#     path: /.*
+#     port: 80
+#     host: winterflowspace.com
+
+# service:
+#   loadBalancer:
+#     - name: winterflowspace
+#       selector: winterflowspace
+#       port: 80
