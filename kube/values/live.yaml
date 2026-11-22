@@ -2,7 +2,7 @@ name: winterflowspace
 
 namespace: winterflowspace
 env:
-  APP_VERSION: c8e2ff1978a7beb5119dc6d0ab152e5b6c960aff
+  APP_VERSION: f33df32b8a9880ce9dc706b745d9f9bda2b25f70
 
 deployment:
   - name: winterflowspace
