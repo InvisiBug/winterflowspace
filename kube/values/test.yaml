@@ -1,6 +1,6 @@
 name: winterflowspace-test
 
-namespace: flowception
+namespace: winterflowspace
 env:
   APP_VERSION: 4302fe55833ddc3e40afd6c95db4ccdb92fc7bd9
 
