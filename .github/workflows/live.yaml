@@ -8,7 +8,7 @@ on:
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_KEY: ${{ secrets.DOCKERHUB_PASSWORD }}
-  IMAGE_NAME: winterflowspace
+  IMAGE_NAME: winterflowspace-client
 
 jobs:
   build-and-push:

@@ -5,26 +5,26 @@ env:
   APP_VERSION: f33df32b8a9880ce9dc706b745d9f9bda2b25f70
 
 deployment:
-  - name: winterflowspace
-    image: invisibug/winterflowspace
+  - name: winterflowspace-client
+    image: invisibug/winterflowspace-client
     ports:
       - port: 80
     # env:
     # Handled in Dockerfile.live
 
 service:
-  name: winterflowspace
-  selector: winterflowspace
+  name: winterflowspace-client
+  selector: winterflowspace-client
   port: 80
   targetPort: 80
 
 httpRoute:
-  name: winterflowspace
+  name: winterflowspace-client
   gatewayName: kavanetes-gateway
   gatewayNamespace: nginx-gateway
-  host: api.winterflowspace.com
+  host: winterflowspace.com
   path: /
-  serviceName: winterflowspace
+  serviceName: winterflowspace-client
   servicePort: 80
 
 # ingress:
